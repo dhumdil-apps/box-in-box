@@ -1,0 +1,12 @@
+{
+    "data": [
+		{
+			"src": "assets/admin/img/slider/1.png",
+			"url": "https://google.com"
+		},
+		{
+			"src": "assets/admin/img/slider/2.jpg",
+			"url": "https://facebook.com"
+		}
+	]
+}
