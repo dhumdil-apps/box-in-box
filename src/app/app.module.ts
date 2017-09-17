@@ -19,6 +19,8 @@ import { LinkComponent }						from './modules/link/link.component';
 // services
 import { HttpGETService }						from './services/http/get.service';
 import { HttpPOSTService }						from './services/http/post.service';
+
+// scroll bar
 import { PerfectScrollbarModule } 				from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface }		from 'ngx-perfect-scrollbar';
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {

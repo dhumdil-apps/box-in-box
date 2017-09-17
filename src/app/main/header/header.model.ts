@@ -10,7 +10,10 @@ export class Navigation {
 
 	constructor(data: any)
 	{
+		this.loading = true;
 		this.active = 0;
+		this.isVisible = false;
+		this.animation = 'void';
 		this.links = [];
 
 		try
@@ -21,12 +24,10 @@ export class Navigation {
 					this.links.push((new Link(item)).link);
 				}
 			});
-			this.loading = false;
 		}
 		catch (e)
 		{
 			this.links = [];
-			this.loading = true;
 		}
 	}
 }

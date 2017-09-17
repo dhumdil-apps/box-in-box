@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild, HostBinding  }	from '@angular/core';
-import { Router }										from '@angular/router';
-import { HttpGETService }								from '../services/http/get.service';
-import { routerTransition }								from './content/router-transitions/routerFadeIn';
+import { Component, ViewChild, HostBinding, HostListener, OnInit }	from '@angular/core';
+import { Router }													from '@angular/router';
+import { HttpGETService }											from '../services/http/get.service';
+import { routerTransition }											from './routerFadeIn';
 
 @Component({
 	selector: 'bnb-main',
@@ -14,9 +14,14 @@ export class MainComponent implements OnInit {
 
 	public page: any;
 
+	@ViewChild('bnb') bnb;
+
 	@HostBinding('@routerTransition') routerTransition;
 
-	@ViewChild('bnb') bnb;
+	@HostListener('window:resize', ['$event']) onResize()
+	{
+		this.handleResize();
+	}
 
 	constructor(private router: Router, private getService: HttpGETService)
 	{
@@ -40,23 +45,7 @@ export class MainComponent implements OnInit {
 
 	ngOnInit()
 	{
-		// handleResize
-		this.page['browser-height'] = this.bnb.nativeElement.offsetParent.clientHeight;
-		this.page['browser-width'] = this.bnb.nativeElement.offsetParent.clientWidth;
-		setInterval(() => {
-			if (this.bnb.nativeElement.offsetParent.clientWidth !== this.page['browser-width'])
-			{
-				this.page['browser-width'] = this.bnb.nativeElement.offsetParent.clientWidth;
-				if (this.page['header-loaded'])
-				{
-					this.page['full-header'] =  (this.page['browser-width'] <= ((this.page['header-len'] * 250) + 200));
-				}
-			}
-			if (this.bnb.nativeElement.offsetParent.clientHeight !== this.page['browser-height'])
-			{
-				this.page['browser-height'] = this.bnb.nativeElement.offsetParent.clientHeight;
-			}
-		}, 50);
+		this.handleResize();
 	}
 
 	private init()
@@ -156,6 +145,21 @@ export class MainComponent implements OnInit {
 		else
 		{
 			this.page['scrolling'] = false;
+		}
+	}
+
+	public handleResize() {
+		if (this.bnb.nativeElement.offsetParent.clientWidth !== this.page['browser-width'])
+		{
+			this.page['browser-width'] = this.bnb.nativeElement.offsetParent.clientWidth;
+			if (this.page['header-loaded'])
+			{
+				this.page['full-header'] =  (this.page['browser-width'] <= ((this.page['header-len'] * 250) + 200));
+			}
+		}
+		if (this.bnb.nativeElement.offsetParent.clientHeight !== this.page['browser-height'])
+		{
+			this.page['browser-height'] = this.bnb.nativeElement.offsetParent.clientHeight;
 		}
 	}
 

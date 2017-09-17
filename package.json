@@ -3,8 +3,10 @@
   "version": "1.1.1",
   "license": "MIT",
   "scripts": {
-    "prestart": "ng build --prod && ngc",
-    "start": "ts-node src/server.ts"
+	  "ng": "ng",
+	  "start": "ng serve",
+	  "build": "ng build",
+	  "lint": "ng lint"
   },
   "private": true,
   "dependencies": {

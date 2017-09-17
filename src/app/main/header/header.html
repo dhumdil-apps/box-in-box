@@ -1,14 +1,16 @@
-<div class="click-catcher-clone {{ menuIsActive() ? 'active' : '' }}"></div>
-<div class="click-catcher" *ngIf="menuIsActive()" (click)="closeMenu()"></div>
+<div *ngIf="!navigation.loading">
+	<div class="click-catcher-clone {{ navigation.isVisible ? 'active' : '' }}"></div>
+	<div class="click-catcher" *ngIf="navigation.isVisible" (click)="closeMenu()"></div>
+</div>
 
 <div class="navigation" [ngClass]="{'fixed': page['fixed-header']}">
-    <div class="navigation_container" *ngIf="!navigation.loading" [ngClass]="{ 'full': isFull() }">
+    <div class="navigation_container" *ngIf="!navigation.loading" [ngClass]="{'full': page['full-header'] }">
 
         <div class="menu" (click)="toggleMenu()">
             <img src="{{ page['path'] + 'menu.svg' }}" />
         </div>
 
-        <div class="links {{ menuIsActive() ? '' : 'hidden' }}" [@headerAnimation]="navigation.animation">
+        <div class="links {{ navigation.isVisible ? '' : 'hidden' }}" [@headerAnimation]="navigation.animation">
 
             <div *ngFor="let link of navigation.links; let i = index">
 
