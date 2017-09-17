@@ -2,7 +2,7 @@
     "data": [
 		{
 			"type":		"scroll",
-			"title":	"HEADER",
+			"title":	"",
 			"id":		"header",
 			"icon":		"home.svg",
 			"show":		true
