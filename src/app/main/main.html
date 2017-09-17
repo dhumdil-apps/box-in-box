@@ -1,0 +1,16 @@
+<!-- BOX IN BOX -->
+<div class="main" #bnb (scroll)="onScroll()" [perfect-scrollbar]="{}">
+
+	<!-- slider (welcome screen) -->
+	<bnb-slider *ngIf="!page['loading']" [page]="page"></bnb-slider>
+
+	<!-- header (navigation) -->
+    <bnb-header *ngIf="!page['loading']" [page]="page" (navigate)="navigateTo($event)"></bnb-header>
+
+	<!-- content -->
+    <router-outlet></router-outlet>
+
+	<!-- footer (contact / config) -->
+    <bnb-footer *ngIf="!page['loading']" [page]="page"></bnb-footer>
+
+</div>

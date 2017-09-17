@@ -1,0 +1,25 @@
+<div class="popup layout-row">
+	<div class="backdrop" (click)="close()"></div>
+	<div class="popup_container">
+
+		<!-- Header -->
+		<div class="btn_wrapper">
+			<div class="btn" (click)="close()">
+				<img src="{{ img('close.svg') }}" />
+			</div>
+		</div>
+
+		<!-- Content -->
+		<div class="content_wrapper">
+			<div class="content">
+				<div>
+					<div>
+						<h1 class="center">{{ popup.title }}</h1>
+						<div [innerHTML]="popup.content"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>

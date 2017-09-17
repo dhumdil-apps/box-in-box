@@ -1,0 +1,14 @@
+<!-- Footer -->
+<div class="footer">
+
+	<!-- Loader -->
+	<div class="layout-row" *ngIf="footer.loading">
+		<div class='uil-ring-css loader' style='transform:scale(1);'><div></div></div>
+	</div>
+
+	<!-- Content -->
+    <div class="layout-row" *ngIf="!footer.loading">
+		<h1 class="layout-center">FOOTER</h1>
+	</div>
+
+</div>

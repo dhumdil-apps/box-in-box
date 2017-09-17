@@ -1,0 +1,17 @@
+.main {
+	overflow:auto;
+    width: 100%;
+	height: 100%;
+	background: #fff;
+	z-index: 200;
+	animation-fill-mode: both;
+
+	&:before {
+		display: block;
+		position: relative;
+		content: '';
+		width: 100%;
+		height: ~"calc(100% - 50px)";
+		background: transparent;
+	}
+}

@@ -1,0 +1,33 @@
+<div class="click-catcher-clone {{ menuIsActive() ? 'active' : '' }}"></div>
+<div class="click-catcher" *ngIf="menuIsActive()" (click)="closeMenu()"></div>
+
+<div class="navigation" [ngClass]="{'fixed': page['fixed-header']}">
+    <div class="navigation_container" *ngIf="!navigation.loading" [ngClass]="{ 'full': isFull() }">
+
+        <div class="menu" (click)="toggleMenu()">
+            <img src="{{ page['path'] + 'menu.svg' }}" />
+        </div>
+
+        <div class="links {{ menuIsActive() ? '' : 'hidden' }}" [@headerAnimation]="navigation.animation">
+
+            <div *ngFor="let link of navigation.links; let i = index">
+
+                <bnb-link *ngIf="link.type !== 'dropdown'"
+						  [link]="link"
+						  [path]="page['path']"
+                          (click)="navigateTo(link, i)">
+                </bnb-link>
+
+                <bnb-dropdown *ngIf="link.type === 'dropdown'"
+							  [path]="page['path']"
+                              [dropdown]="link.dropdown"
+                              (selected)="navigateToSelected(link, i)">
+                </bnb-dropdown>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="space" *ngIf="page['fixed-header']"></div>

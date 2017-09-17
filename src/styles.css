@@ -1,1 +1,7 @@
-/* You can add global styles to this file, and also import other style files */
+
+/* The Perfect Scrollbar Style */
+@import '~perfect-scrollbar/dist/css/perfect-scrollbar.min.css';
+.ps__scrollbar-y-rail {
+	z-index: 10000;
+}
+

@@ -1,0 +1,132 @@
+.navigation {
+	display: flex;
+	position: relative;
+    width: 100%;
+    height: 50px;
+	box-shadow: 0 1px 5px #999;
+	background: #fff;
+	z-index: 1000;
+
+    .links {
+        height: 50px;
+        display: flex;
+        z-index: 200;
+    }
+}
+
+.fixed {
+	position: fixed;
+    top: 0;
+	left: 0;
+}
+
+.menu {
+    display: none;
+    //flex: 1;
+	width: 100%;
+	min-width: 100%;
+    height: 50px;
+    cursor: pointer;
+
+	img {
+		margin: auto;
+	}
+    &:hover {
+        &::after {
+            visibility: visible;
+        }
+    }
+    &::after {
+		visibility: hidden;
+		content: '';
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		height: 1px;
+		width: 100%;
+		background: #000;
+        z-index: 999;
+    }
+
+    img {
+        margin: auto;
+    }
+}
+
+.navigation_container {
+	display: flex;
+	font-size: 18px;
+	font-weight: 600;
+    margin: 0 auto;
+}
+
+.space {
+    width: 100%;
+    height: 50px;
+    background: #fff;
+	z-index: 200;
+}
+
+bnb-dropdown, bnb-link {
+    display: block;
+    position: relative;
+    width: 250px;
+    height: 50px;
+}
+
+.click-catcher {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 250;
+	transition: all 300ms ease;
+	background: transparent;
+}
+
+.active {
+	transition: all 300ms ease;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 250;
+	animation-name: animateMe;
+	animation-duration: 1s;
+	background: rgba(0,0,0, 0.5);
+}
+
+@keyframes animateMe {
+	0%   {display: block;}
+	100% {display: none;}
+}
+
+.full {
+	width: 100%;
+	display: block;
+	margin: 0;
+
+	.hidden {
+		visibility: hidden;
+	}
+	.links {
+		animation-fill-mode: both;
+		position: fixed;
+		left: 0;
+		top: 0;
+		background: #fff;
+		height: 100%;
+		width: 250px;
+		display: block;
+		padding: 60px 0 10px 0;
+
+		bnb-link, bnb-dropdown {
+			border-bottom: 1px solid #ddd;
+		}
+	}
+	.menu {
+		display: flex;
+	}
+}

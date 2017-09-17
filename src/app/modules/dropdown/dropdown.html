@@ -1,0 +1,26 @@
+<div class="click-catcher" *ngIf="dropdown['isVisible']" (click)="close()"></div>
+
+<div class="dropdown">
+
+    <div class="item{{ dropdown['isVisible'] ? ' selected' : '' }}" (click)="toggle()">
+        <div *ngIf="dropdown['centerTitle']" class="flex"></div>
+
+        <img *ngIf="dropdown['icon'] !== ''" src="{{ path + dropdown['icon'] }}" />
+        <div class="text">{{ dropdown['title'] }}</div>
+
+        <div *ngIf="dropdown['centerTitle']" class="flex"></div>
+    </div>
+
+    <div class="list" *ngIf="dropdown['isVisible']">
+
+        <div class="item{{ i === dropdown['selected'] ? ' selected' : '' }}" *ngFor="let item of dropdown['list']; let i = index" (click)="select(i)">
+            <div *ngIf="dropdown['centerListItems']" class="flex"></div>
+
+            <div class="text">{{ item }}</div>
+
+            <div *ngIf="dropdown['centerListItems']" class="flex"></div>
+        </div>
+
+    </div>
+
+</div>
