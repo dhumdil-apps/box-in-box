@@ -2,7 +2,6 @@ import { NgModule } 			from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { NotFoundComponent } 	from './main/content/not-found/not-found.component';
-import { YTContentComponent } 	from './main/content/youtube-content/youtube-content.component';
 
 const routes: Routes = [
 	{
@@ -24,6 +23,5 @@ const routes: Routes = [
 export class AppRoutingModule {}
 
 export const routedComponents = [
-	NotFoundComponent,
-	YTContentComponent
+	NotFoundComponent
 ];
