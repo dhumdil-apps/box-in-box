@@ -10,6 +10,7 @@ import { MainComponent }						from './main/main.component';
 import { SliderComponent }						from './main/slider/slider.component';
 import { HeaderComponent }						from './main/header/header.component';
 import { FooterComponent }						from './main/footer/footer.component';
+import { EmptyPageComponent } 					from './main/content/empty-page/empty-page.component';
 
 // modules
 import { PopupComponent }						from './modules/popup/popup.component';
@@ -20,12 +21,9 @@ import { LinkComponent }						from './modules/link/link.component';
 import { HttpGETService }						from './services/http/get.service';
 import { HttpPOSTService }						from './services/http/post.service';
 
-// scroll bar
+// external
 import { PerfectScrollbarModule } 				from 'ngx-perfect-scrollbar';
-import { PerfectScrollbarConfigInterface }		from 'ngx-perfect-scrollbar';
-const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-	suppressScrollX: true
-};
+import { YoutubePlayerModule } 					from 'ng2-youtube-player';
 
 // router
 import { AppRoutingModule, routedComponents }	from './app.routing';
@@ -37,6 +35,7 @@ import { AppRoutingModule, routedComponents }	from './app.routing';
 		SliderComponent,
 		HeaderComponent,
 		FooterComponent,
+		EmptyPageComponent,
 		PopupComponent,
 		DropdownComponent,
 		LinkComponent,
@@ -48,7 +47,8 @@ import { AppRoutingModule, routedComponents }	from './app.routing';
 		HttpModule,
 		BrowserAnimationsModule,
 		AppRoutingModule,
-		PerfectScrollbarModule.forRoot(PERFECT_SCROLLBAR_CONFIG)
+		YoutubePlayerModule,
+		PerfectScrollbarModule.forRoot({suppressScrollX: true})
 	],
 	providers: [
 		HttpGETService,

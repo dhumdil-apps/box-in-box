@@ -1,16 +1,18 @@
 <!-- BOX IN BOX -->
-<div class="main" #bnb (scroll)="onScroll()" [perfect-scrollbar]="{}">
+<div class="main {{ page['popup-is-active'] ? 'hide-scrollbar' : '' }}" #bnb [ngClass]="{'full': page['full-header']}" [perfectScrollbar]="{}" (scroll)="onScroll()">
+
+	<bnb-empty-page></bnb-empty-page>
 
 	<!-- slider (welcome screen) -->
 	<bnb-slider *ngIf="!page['loading']" [page]="page"></bnb-slider>
 
 	<!-- header (navigation) -->
-    <bnb-header *ngIf="!page['loading']" [page]="page" (navigate)="navigateTo($event)"></bnb-header>
+	<bnb-header *ngIf="!page['loading']" [page]="page" (navigate)="navigateTo($event)"></bnb-header>
 
 	<!-- content -->
-    <router-outlet></router-outlet>
+	<router-outlet></router-outlet>
 
-	<!-- footer (contact / config) -->
-    <bnb-footer *ngIf="!page['loading']" [page]="page"></bnb-footer>
+	<!-- footer (contact) -->
+	<bnb-footer *ngIf="!page['loading']" [page]="page"></bnb-footer>
 
 </div>

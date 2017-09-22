@@ -1,7 +1,30 @@
 .empty-page {
-	position: relative;
-	width: 100%;
-	min-height: ~"calc(100% - 50px)";
-	background: #eee;
-	z-index: 200;
+	position: fixed;
+	top: 0;
+	left: 0;
+	min-width: 100%;
+	min-height: 100%;
+	z-index: 99999;
+	background: rgba(255,255,255, 0);
+	animation: fade-out-loader 0.5s linear;
+	display: flex;
+	opacity: 0;
+}
+
+@keyframes fade-out-loader {
+	from {
+		opacity: 1;
+		display: flex;
+		background: rgba(255,255,255, 1);
+	}
+	90% {
+		opacity: 1;
+		display: flex;
+		background: rgba(255,255,255, 1);
+	}
+	to {
+		display: none;
+		opacity: 0;
+		background: rgba(255,255,255, 0);
+	}
 }

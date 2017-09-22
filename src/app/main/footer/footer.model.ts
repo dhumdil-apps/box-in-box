@@ -3,7 +3,8 @@ export class Footer {
 	public data: any;
 	public loading: boolean;
 
-	constructor(data: any) {
+	constructor(data: any)
+	{
 		try
 		{
 			this.data = data;
@@ -12,8 +13,6 @@ export class Footer {
 		catch (e)
 		{
 			this.data = {};
-			this.loading = true;
 		}
 	}
-
 }

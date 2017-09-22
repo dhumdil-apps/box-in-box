@@ -1,58 +1,46 @@
-import { Component, ViewChild, Input, OnInit }			from '@angular/core';
-import { HttpGETService }								from '../../services/http/get.service';
-import { Slides }										from './slides.model';
-import { sliderAnimation }								from './slider-animation';
+import { Component, Input } from '@angular/core';
+import { HttpGETService }		from '../../services/http/get.service';
+import { Slider }				from './slider.model';
+import { Popup } 				from '../../modules/popup/popup.model';
 
 @Component({
 	selector: 'bnb-slider',
 	templateUrl: './slider.html',
-	styleUrls: ['./slider.less'],
-	animations: [sliderAnimation]
+	styleUrls: ['./slider.less']
 })
 
-export class SliderComponent implements OnInit {
+export class SliderComponent {
 
+	public popup: Popup;
 	public slider: any;
-	private hack: any;
+	public selectedIndexes = [];
 
 	@Input() page;
-
-	@ViewChild('wrapper') wrapper;
 
 	constructor(private getService: HttpGETService)
 	{
 		this.slider = {
-			'active': -1,
-			'animation': '',
-			'BTNsEnabled': true,
-			'auto-slide': {},
-			'isAutoSlideOn': false
+			'loading': true
 		};
-		this.hack = {
-			'active': 0,
-			'animation': 'active'
-		};
-	}
-
-	ngOnInit()
-	{
+		this.popup = new Popup();
 		this.getService.get('slider.json').subscribe(data => {
-			this.slider.slides = (new Slides(data)).slides;
+			this.slider = new Slider(data);
 			this.setAutoSlideOn();
 		});
 	}
 
 	private setAutoSlideOn(): void
 	{
-		if (this.slider.slides.length > 0)
+		if (this.slider.slides.length > 1)
 		{
-			this.randomizeSlide();
 			this.slider.isAutoSlideOn = true;
-			this.slider.active = this.hack.active;
+			let index: number;
 
-			this.slider['auto-slide'] = setInterval(() => {
-				this.changeSlide('next', this.slider.active < this.slider.slides.length - 1 ? this.slider.active + 1 : 0);
-			}, 6000);
+			this.slider['auto-slide'] = setInterval(() =>
+			{
+				index = this.slider.activeSlide < this.slider.slides.length - 1 ? this.slider.activeSlide + 1 : 0;
+				this.selectSlide(index, true);
+			}, 5000);
 		}
 	}
 
@@ -62,57 +50,99 @@ export class SliderComponent implements OnInit {
 		clearInterval(this.slider['auto-slide']);
 	}
 
-	private randomizeSlide(): void
+	public selectSlide(index: number, autoSlide = false): void
 	{
-		this.hack.active = Math.floor((Math.random() * (this.slider.slides.length)));
-		this.selectSlide(this.slider.active);
+		if (this.slider.isFirstTime)
+		{
+			this.slider.isFirstTime = false;
+		}
+		if (this.selectedIndexes.length > 0)
+		{
+			if (this.selectedIndexes[this.selectedIndexes.length - 1] !== index)
+			{
+				this.selectedIndexes.push(index);
+			}
+		}
+		else
+		{
+			this.selectedIndexes.push(index);
+		}
+
+		if (this.slider.isAutoSlideOn && !autoSlide)
+		{
+			this.setAutoSlideOff();
+		}
+		if (this.selectedIndexes.length === 1)
+		{
+			index = this.selectedIndexes[0];
+
+			if (this.slider.activeSlide !== index)
+			{
+				this.slider.activeSlide = index;
+			}
+			const interval = setInterval(() =>
+			{
+				this.selectedIndexes.shift();
+				if (this.selectedIndexes.length > 0)
+				{
+					console.log(this.selectedIndexes);
+					index = this.selectedIndexes[0];
+
+					if (this.slider.activeSlide !== index)
+					{
+						this.slider.activeSlide = index;
+					}
+				}
+				else
+				{
+					clearInterval(interval);
+				}
+			}, 300);
+		}
 	}
 
-	public selectSlide(index: number): void
+	public animateIfActive(index: number): string
+	{
+		if (this.slider.isFirstTime)
+		{
+			return ((index === this.slider.activeSlide) ? 'animated' : 'hided');
+		}
+		return ((index === this.slider.activeSlide) ? 'animate' : 'hide');
+	}
+
+	public w(index: number): number
+	{
+		// if (this.slider.slides[index].w < this.page['browser-width'])
+		// {
+		// 	//TODO: resize
+		// }
+		return (this.page['browser-width']);
+	}
+
+	public h(index: number): number
+	{
+		// if (this.slider.slides[index].h < this.page['browser-height'] - 50)
+		// {
+		// 	// TODO: resize
+		// }
+		return (this.page['browser-height'] - 50);
+	}
+
+	public openPopup(title: string, desc: any): void
 	{
 		if (this.slider.isAutoSlideOn)
 		{
 			this.setAutoSlideOff();
 		}
-		if (this.slider.active !== index)
-		{
-			this.changeSlide('down', index);
-		}
+		this.page['popup-is-active'] = true;
+		this.popup.isVisible = true;
+		this.popup.title = title;
+		this.popup.lines = desc;
 	}
 
-	private changeSlide(animation: string, activeIndex: number): void
+	public popupOnClose(): void
 	{
-		if (this.slider.BTNsEnabled)
-		{
-			this.slider.BTNsEnabled = false; // disable button
-			this.hack.active = activeIndex; // change active slide
-			this.slider.animation = animation; // animate
-			this.hack.animation = animation;
-		}
-	}
-
-	public animationStarted(ev: any): void
-	{
-		// console.log(ev.fromState, '->', ev.toState, ev.totalTime + 'ms');
-		if (ev.toState === 'down' || ev.toState === 'next')
-		{
-			// active -> 'animation' -> inactive
-			this.slider.active = this.hack.active;
-		}
-	}
-
-	public animationDone(ev: any): void
-	{
-		if (ev.fromState === 'inactive' && (ev.toState === 'down' || ev.toState === 'next'))
-		{
-			// inactive -> 'animation' -> active
-			this.slider.animation = 'active';
-		}
-		if (ev.toState === 'active')
-		{
-			// enable slider buttons
-			this.slider.BTNsEnabled = true;
-		}
+		this.page['popup-is-active'] = false;
 	}
 
 }

@@ -1,7 +1,37 @@
 
-/* The Perfect Scrollbar Style */
+/* The Perfect Scrollbar Doesn't E... What what?? */
 @import '~perfect-scrollbar/dist/css/perfect-scrollbar.min.css';
 .ps__scrollbar-y-rail {
 	z-index: 10000;
 }
+.ps__scrollbar-x-rail {
+	display: none;
+}
+.hide-scrollbar.ps.ps--active-y>.ps__scrollbar-y-rail {
+	display: none;
+}
+bnb-popup .ps.ps--active-y>.ps__scrollbar-y-rail {
+	display: block;
+}
 
+bnb-slider {
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: block;
+	width: 100%;
+	min-height: calc(100% - 50px);
+}
+
+@keyframes fade-in-page {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+.empty-page, .page-not-found {
+	animation: fade-in-page 300ms ease-out;
+}

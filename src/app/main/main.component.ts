@@ -1,13 +1,13 @@
-import { Component, ViewChild, HostBinding, HostListener, OnInit }	from '@angular/core';
-import { Router }													from '@angular/router';
-import { HttpGETService }											from '../services/http/get.service';
-import { routerTransition }											from './routerFadeIn';
+import { Component, ViewChild, HostListener, OnInit }	from '@angular/core';
+import { Router }										from '@angular/router';
+import { HttpGETService }								from '../services/http/get.service';
+import { PerfectScrollbarDirective }	 				from 'ngx-perfect-scrollbar';
+import { HeaderComponent } 								from './header/header.component';
 
 @Component({
 	selector: 'bnb-main',
 	templateUrl: './main.html',
-	styleUrls: ['./main.less'],
-	animations: [ routerTransition ]
+	styleUrls: ['./main.less']
 })
 
 export class MainComponent implements OnInit {
@@ -16,7 +16,9 @@ export class MainComponent implements OnInit {
 
 	@ViewChild('bnb') bnb;
 
-	@HostBinding('@routerTransition') routerTransition;
+	@ViewChild(HeaderComponent) headerComponent: HeaderComponent;
+
+	@ViewChild(PerfectScrollbarDirective) directiveScroll: PerfectScrollbarDirective;
 
 	@HostListener('window:resize', ['$event']) onResize()
 	{
@@ -34,11 +36,10 @@ export class MainComponent implements OnInit {
 			'langs':  ['en'],
 			'langIndex': 0,
 			'loading': true,
-			'scrolled-px': 0,
-			'scrolling': false,
 			'header-loaded': false,
 			'header-len': 0,
-			'full-header': false
+			'full-header': false,
+			'popup-is-active': false
 		};
 		this.init();
 	}
@@ -46,6 +47,16 @@ export class MainComponent implements OnInit {
 	ngOnInit()
 	{
 		this.handleResize();
+	}
+
+	private onScroll()
+	{
+		this.page['fixed-header'] = (this.getScrollTop() >= (this.page['browser-height'] - 51));
+
+		if (this.page['header-loaded'] && this.page['full-header'])
+		{
+			this.headerComponent.closeMenu();
+		}
 	}
 
 	private init()
@@ -87,74 +98,34 @@ export class MainComponent implements OnInit {
 
 	private scrollTo(section: string): void
 	{
-		this.page['scrolling'] = true;
-		let start = this.getScrollTop() + 1;
-		let end	= 0;
-
 		if (section === this.page['scroll-sections'][1])
 		{
-			end = this.page['browser-height'] - 50;
+			this.directiveScroll.scrollToY(this.page['browser-height'] - 50, 500);
 		}
 		else if (section === this.page['scroll-sections'][2])
 		{
-			end = this.getScrollHeight() - this.getOffsetHeight();
-		}
-
-		let step = end;
-
-		if (start > end)
-		{
-			// scroll UP
-			const interval = setInterval(() => {
-
-				step	= Math.ceil((start - end) / 12.5);
-				start	= start - step;
-
-				if (start > end)
-				{
-					this.setScrollTop(start);
-				}
-				else
-				{
-					this.setScrollTop(end);
-					clearInterval(interval);
-					this.page['scrolling'] = false;
-				}
-			}, 10);
-		}
-		else if (start < end)
-		{
-			// scroll DOWN
-			const interval = setInterval(() => {
-
-				step	= Math.floor(step / 1.001);
-				start	= start + (end - step);
-
-				if (start < end)
-				{
-					this.setScrollTop(start);
-				}
-				else
-				{
-					this.setScrollTop(end);
-					clearInterval(interval);
-					this.page['scrolling'] = false;
-				}
-			}, 10);
+			this.directiveScroll.scrollToY(this.getScrollHeight() - this.getOffsetHeight(), 500);
 		}
 		else
 		{
-			this.page['scrolling'] = false;
+			this.directiveScroll.scrollToY(0 - this.getScrollHeight(), 800);
 		}
 	}
 
-	public handleResize() {
+	public handleResize()
+	{
 		if (this.bnb.nativeElement.offsetParent.clientWidth !== this.page['browser-width'])
 		{
 			this.page['browser-width'] = this.bnb.nativeElement.offsetParent.clientWidth;
+
 			if (this.page['header-loaded'])
 			{
 				this.page['full-header'] =  (this.page['browser-width'] <= ((this.page['header-len'] * 250) + 200));
+
+				if (this.page['full-header'])
+				{
+					this.headerComponent.closeMenu();
+				}
 			}
 		}
 		if (this.bnb.nativeElement.offsetParent.clientHeight !== this.page['browser-height'])
@@ -163,21 +134,9 @@ export class MainComponent implements OnInit {
 		}
 	}
 
-	public onScroll(): void
-	{
-		this.getScrollTop();
-		this.page['fixed-header'] = (this.getScrollTop() >= (this.page['browser-height'] - 51));
-	}
-
 	private getScrollTop(): number
 	{
-		this.page['scrolled-px'] = this.bnb.nativeElement.scrollTop;
-		return this.page['scrolled-px'];
-	}
-
-	private setScrollTop(size: number): void
-	{
-		this.bnb.nativeElement.scrollTop = size;
+		return this.bnb.nativeElement.scrollTop;
 	}
 
 	private getOffsetHeight(): number

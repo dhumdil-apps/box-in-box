@@ -1,35 +1,47 @@
-<div *ngIf="!navigation.loading">
-	<div class="click-catcher-clone {{ navigation.isVisible ? 'active' : '' }}"></div>
-	<div class="click-catcher" *ngIf="navigation.isVisible" (click)="closeMenu()"></div>
-</div>
-
 <div class="navigation" [ngClass]="{'fixed': page['fixed-header']}">
+
     <div class="navigation_container" *ngIf="!navigation.loading" [ngClass]="{'full': page['full-header'] }">
 
-        <div class="menu" (click)="toggleMenu()">
-            <img src="{{ page['path'] + 'menu.svg' }}" />
-        </div>
+		<bnb-link class="menu"
+				  [link]="navigation.menu"
+				  [path]="page['path']"
+				  (click)="toggleMenu()">
+		</bnb-link>
 
-        <div class="links {{ navigation.isVisible ? '' : 'hidden' }}" [@headerAnimation]="navigation.animation">
+		<div class="navigation-bar {{ navigation.isVisible ? 'slide-in' : 'slide-out' }}">
 
-            <div *ngFor="let link of navigation.links; let i = index">
+			<bnb-link class="menu"
+					  [link]="navigation.menu"
+					  [path]="page['path']"
+					  (click)="toggleMenu()">
+			</bnb-link>
 
-                <bnb-link *ngIf="link.type !== 'dropdown'"
-						  [link]="link"
-						  [path]="page['path']"
-                          (click)="navigateTo(link, i)">
-                </bnb-link>
+			<div class="links">
+				<div *ngFor="let link of navigation.links; let i = index">
 
-                <bnb-dropdown *ngIf="link.type === 'dropdown'"
+					<bnb-link *ngIf="link.type !== 'dropdown'"
+							  [link]="link"
 							  [path]="page['path']"
-                              [dropdown]="link.dropdown"
-                              (selected)="navigateToSelected(link, i)">
-                </bnb-dropdown>
+							  (click)="navigateTo(link, i)">
+					</bnb-link>
 
-            </div>
-        </div>
+					<bnb-dropdown *ngIf="link.type === 'dropdown'"
+								  [path]="page['path']"
+								  [dropdown]="link.dropdown"
+								  (selected)="navigateToSelected(link, i)">
+					</bnb-dropdown>
+
+				</div>
+			</div>
+
+		</div>
 
     </div>
+
 </div>
 
+<!-- click catcher -->
+<div class="click-catcher {{ navigation.isVisible ? 'click-catcher-in' :  'click-catcher-out' }}" (click)="closeMenu()"></div>
+
+<!-- space after switching to fixed position -->
 <div class="space" *ngIf="page['fixed-header']"></div>

@@ -4,68 +4,186 @@
 	left: 0;
     width: 100%;
 	min-height: 100%;
-    background: #eee;
+	background: rgba(0,0,0, 0.5);
 	overflow: hidden;
 
-    &:hover, &:active {
-        .slider__navigation {
-            opacity: 1;
-            transition: opacity 600ms ease;
-            &__pagination {
-                display: flex;
-            }
-        }
-    }
-    &_wrapper {
-        position: relative;
-		transition: all 200ms ease-in-out;
-        height: 0; // js
-    }
-    &__slide {
-		position: absolute;
-		width: auto;
-		min-width: 100%;
-		left: 50%;
-		transform: translate3d(-50%, 0, 0);
-        top: 0;
+	&:hover, &:active {
+		.btns {
+			animation-name: pulse-size;
+
+			> div {
+				> div {
+					> div {
+						animation-name: pulse-colors;
+					}
+				}
+			}
+		}
+	}
+	.animate img {
+		z-index: 150;
+		visibility: visible;
+		animation: slide-down 300ms ease-in;
 		animation-fill-mode: both;
-    }
-    &__navigation {
-        opacity: 0;
-        display: flex;
-        position: absolute;
-        bottom: -50px;
-        left: 0;
-        width: 100%;
-        height: 50px;
-        z-index: 150;
+	}
+	.hide img {
+		z-index: 50;
+		animation: wait-for-slide-down 300ms linear;
+	}
+	.animate .content {
+		z-index: 250;
+		visibility: visible;
+		animation: slide-right 300ms ease-in;
+		animation-delay: 300ms;
+		animation-fill-mode: both;
+	}
+	.hide .content {
+		z-index: 50;
+	}
+	.animated img {
+		z-index: 150;
+		visibility: visible;
+	}
+	.hided img {
+		z-index: 50;
+		visibility: hidden;
+	}
+	.animated .content {
+		z-index: 250;
+		visibility: visible;
+	}
+	.hided .content {
+		z-index: 50;
+	}
+}
 
-		&__pagination {
-            position: relative;
-            margin: auto;
-            display: none;
+.slides {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	min-height: 100%;
 
-            > div {
-                padding: 5px;
-                margin: 0 5px;
-                cursor: pointer;
-                &:hover {
-                    .slider__navigation__pagination_circle {
-                        background: #eee;
-                    }
-                }
-            }
-            &_circle {
-                position: relative;
-                width: 5px;
-                height: 5px;
-                background: transparent;
-                border-radius: 50%;
-                border: 2px solid #333;
-            }
-            .active {
-                background: #333;
-            }
-        }
-    }
+	img {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate3d(-50%, -50%, 0);
+		visibility: hidden;
+	}
+	.content {
+		display: flex;
+		position: absolute;
+		top: 50px;
+		left: 0;
+		width: 100%;
+		height: ~"calc(100% - 50px)";
+
+		h1 {
+			width: 100%;
+			margin: auto 0;
+			color: #eee;
+			text-align: center;
+			background: rgba(0,0,0, 0.5);
+			cursor: pointer;
+		}
+	}
+}
+
+.btns {
+	position: absolute;
+	display: flex;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 50px;
+	animation-duration: .4s;
+	animation-fill-mode: both;
+	z-index: 150;
+	opacity: 0.5;
+
+	&:hover, &:active {
+		opacity: 1;
+		background: rgba(0,0,0, .3);
+	}
+	> div {
+		display: flex;
+		margin: auto;
+
+		> div {
+			padding: 5px;
+			margin: 0 5px;
+			cursor: pointer;
+
+			&:hover {
+				> div {
+					background: #eee;
+				}
+			}
+			> div {
+				position: relative;
+				width: 7px;
+				height: 7px;
+				background: transparent;
+				border-radius: 50%;
+				border: 2px solid #333;
+				animation-duration: .6s;
+				animation-fill-mode: both;
+			}
+			.active {
+				background: #333;
+			}
+		}
+	}
+}
+
+@keyframes pulse-colors {
+	from {
+		background: #eee;
+	}
+	50% {
+		background: #000;
+	}
+	to {
+	}
+}
+
+@keyframes pulse-size {
+	from {
+		transform: scale3d(1, 1, 1);
+	}
+	50% {
+		transform: scale3d(1.2, 1.2, 1.2);
+	}
+	to {
+		transform: scale3d(1, 1, 1);
+	}
+}
+
+@keyframes slide-down {
+	from {
+		transform: translate3d(-50%, -150%, 0);
+	}
+	to {
+	}
+}
+
+@keyframes slide-right {
+	from {
+		opacity: 0;
+		transform: translate3d(-100%, 0, 0);
+	}
+	to {
+		transform: none;
+		opacity: 1;
+	}
+}
+
+@keyframes wait-for-slide-down {
+	from {
+		visibility: visible;
+	}
+	to {
+		visibility: hidden;
+	}
 }

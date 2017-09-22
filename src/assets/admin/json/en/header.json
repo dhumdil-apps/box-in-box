@@ -2,23 +2,30 @@
     "data": [
 		{
 			"type":		"scroll",
-			"title":	"",
+			"title":	"BNB",
 			"id":		"header",
-			"icon":		"home.svg",
+			"icon":		"logo.png",
 			"show":		true
 		},
 		{
 			"type":		"content",
-			"title":	"EMPTY PAGE",
+			"title":	"Videa",
 			"id":		"/",
-			"icon":		"",
+			"icon":		"play.svg",
 			"show":		true
 		},
 		{
+			"type":		"content",
+			"title":	"Fotky",
+			"id":		"/",
+			"icon":		"image.svg",
+			"show":		false
+		},
+		{
 			"type":		"scroll",
-			"title":	"FOOTER",
+			"title":	"About",
 			"id":		"footer",
-			"icon":		"",
+			"icon":		"name-black.svg",
 			"show":		true
 		}
 	]

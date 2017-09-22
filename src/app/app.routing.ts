@@ -1,18 +1,18 @@
-import { NgModule } from '@angular/core';
+import { NgModule } 			from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { EmptyPageComponent } from './main/content/empty-page/empty-page.component';
-import { Page404Component } from './main/content/page-404/page-404.component';
+import { NotFoundComponent } 	from './main/content/not-found/not-found.component';
+import { YTContentComponent } 	from './main/content/youtube-content/youtube-content.component';
 
 const routes: Routes = [
 	{
 		path: '',
 		pathMatch: 'full',
-		component: EmptyPageComponent
+		redirectTo: '/404'
 	},
 	{
 		path: '**',
-		component: Page404Component
+		component: NotFoundComponent
 	}
 ];
 
@@ -24,6 +24,6 @@ const routes: Routes = [
 export class AppRoutingModule {}
 
 export const routedComponents = [
-	EmptyPageComponent,
-	Page404Component
+	NotFoundComponent,
+	YTContentComponent
 ];

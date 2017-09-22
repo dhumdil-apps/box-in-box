@@ -66,22 +66,6 @@ a {
 .link {
     color: #369;
 }
-@media all and (max-width: 500px) {
-    h1 {
-        text-align: left;
-        font-size: 28px;
-    }
-    h2 {
-        font-size: 24px;
-    }
-    h3 {
-        line-height: 125%;
-        font-size: 18px;
-    }
-    p {
-        font-size: 15px;
-    }
-}
 .layout-row {
 	display: flex;
 }
@@ -111,3 +95,21 @@ a {
 	padding: 10px 0;
 	text-align: center;
 }
+/*
+@media all and (max-width: 500px) {
+    h1 {
+        text-align: left;
+        font-size: 28px;
+    }
+    h2 {
+        font-size: 24px;
+    }
+    h3 {
+        line-height: 125%;
+        font-size: 18px;
+    }
+    p {
+        font-size: 15px;
+    }
+}
+*/

@@ -1,5 +1,4 @@
-import { Component  }	from '@angular/core';
-import { Meta, Title }	from '@angular/platform-browser';
+import { Component } from '@angular/core';
 
 @Component({
 	selector: 'bnb-empty-page',
@@ -9,15 +8,14 @@ import { Meta, Title }	from '@angular/platform-browser';
 
 export class EmptyPageComponent {
 
-	constructor(title: Title, meta: Meta)
-	{
-		title.setTitle('Empty Page');
+	public loading: boolean;
 
-		meta.addTags([
-			{ name: 'author',   content: 'Box in Box'},
-			{ name: 'keywords', content: 'box in box, empty, plain'},
-			{ name: 'description', content: 'Page with no content' }
-		]);
+	constructor()
+	{
+		this.loading = true;
+		setTimeout(() => {
+			this.loading = false;
+		}, 1000);
 	}
 
 }

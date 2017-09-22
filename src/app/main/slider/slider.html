@@ -1,31 +1,23 @@
 <!-- Slider -->
-<div class="slider" #wrapper>
-    <div class="slider_wrapper" *ngIf="slider.active !== -1">
+<div class="slider" *ngIf="!slider.loading">
 
-        <!-- Slides -->
-        <div *ngFor="let slide of slider.slides; let i = index;">
-            <a href="{{ slide.url }}" target="_blank">
-                <img class="slider__slide"
-					 [@animateSlide]="i === slider.active ? slider.animation : 'inactive'"
-					 (@animateSlide.start)="animationStarted($event)"
-					 (@animateSlide.done)="animationDone($event)"
-					 height="{{ page['browser-height'] - 50 }}"
-                     src="{{ slide.src }}"
-                />
-            </a>
-        </div>
+	<!-- Slides -->
+	<div class="slides {{ animateIfActive(i) }}" *ngFor="let slide of slider.slides; let i = index;">
+		<img src="{{ slide.src }}" width="{{ w(i) }}" height="{{ h(i) }}"/>
+		<div class="content">
+			<h1 (click)="openPopup(slide.title, slide.desc)">{{ slide.title }}</h1>
+		</div>
+	</div>
 
-        <!-- Slider Navigation -->
-        <div class="slider__navigation layout-row" *ngIf="slider.slides.length > 1">
+	<!-- Navigation -->
+	<div class="btns" *ngIf="slider.slides.length > 1">
+		<div>
+			<div *ngFor="let slide of slider.slides; let i = index;" (click)="selectSlide(i)">
+				<div [ngClass]="{'active': i === slider.activeSlide}"></div>
+			</div>
+		</div>
+	</div>
 
-            <!-- Pagination -->
-            <div class="slider__navigation__pagination layout-row">
-                <div *ngFor="let slide of slider.slides; let i = index;" class="layout-row" (click)="selectSlide(i)">
-                    <div class="slider__navigation__pagination_circle" [ngClass]="{'active': i === slider.active}"></div>
-                </div>
-            </div>
-
-        </div>
-
-    </div>
 </div>
+
+<bnb-popup *ngIf="popup.isVisible" [popup]="popup" (close)="popupOnClose()"></bnb-popup>
