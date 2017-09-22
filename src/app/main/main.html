@@ -11,6 +11,7 @@
 
 	<!-- content -->
 	<router-outlet></router-outlet>
+	<bnb-youtube-content [page]="page"></bnb-youtube-content>
 
 	<!-- footer (contact) -->
 	<bnb-footer *ngIf="!page['loading']" [page]="page"></bnb-footer>

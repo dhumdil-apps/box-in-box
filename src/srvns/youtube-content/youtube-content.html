@@ -1,0 +1,17 @@
+<div class="page-not-found">
+
+	<div *ngFor="let id of ids; let i = index">
+
+		<youtube-player [videoId]="id"
+						[width]="page['browser-width']"
+						[height]="page['browser-height'] - 50"
+						(ready)="savePlayer($event)"
+						(change)="onStateChange($event)">
+		</youtube-player>
+
+		<button (click)="playVideo(i)">Play</button>
+		<button (click)="pauseVideo(i)">Pause</button>
+
+	</div>
+
+</div>

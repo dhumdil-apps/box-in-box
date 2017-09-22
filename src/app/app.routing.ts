@@ -2,12 +2,13 @@ import { NgModule } 			from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { NotFoundComponent } 	from './main/content/not-found/not-found.component';
+import { EmptyPageComponent } 	from './main/content/empty-page/empty-page.component';
 
 const routes: Routes = [
 	{
 		path: '',
 		pathMatch: 'full',
-		redirectTo: '/404'
+		component: EmptyPageComponent
 	},
 	{
 		path: '**',
@@ -23,5 +24,6 @@ const routes: Routes = [
 export class AppRoutingModule {}
 
 export const routedComponents = [
-	NotFoundComponent
+	NotFoundComponent,
+	EmptyPageComponent
 ];

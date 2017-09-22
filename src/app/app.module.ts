@@ -11,7 +11,7 @@ import { SliderComponent }						from './main/slider/slider.component';
 import { HeaderComponent }						from './main/header/header.component';
 import { FooterComponent }						from './main/footer/footer.component';
 import { EmptyPageComponent } 					from './main/content/empty-page/empty-page.component';
-
+import { YTContentComponent }					from '../srvns/youtube-content/youtube-content.component';
 // modules
 import { PopupComponent }						from './modules/popup/popup.component';
 import { DropdownComponent }					from './modules/dropdown/dropdown.component';
@@ -36,6 +36,7 @@ import { AppRoutingModule, routedComponents }	from './app.routing';
 		HeaderComponent,
 		FooterComponent,
 		EmptyPageComponent,
+		YTContentComponent,
 		PopupComponent,
 		DropdownComponent,
 		LinkComponent,
