@@ -20,10 +20,10 @@ import { LinkComponent }						from './modules/link/link.component';
 // services
 import { HttpGETService }						from './services/http/get.service';
 import { HttpPOSTService }						from './services/http/post.service';
+import { SafePipe } 							from './services/sanitize/dom-sanitizer';
 
 // external
 import { PerfectScrollbarModule } 				from 'ngx-perfect-scrollbar';
-import { YoutubePlayerModule } 					from 'ng2-youtube-player';
 
 // router
 import { AppRoutingModule, routedComponents }	from './app.routing';
@@ -40,7 +40,8 @@ import { AppRoutingModule, routedComponents }	from './app.routing';
 		PopupComponent,
 		DropdownComponent,
 		LinkComponent,
-		routedComponents
+		routedComponents,
+		SafePipe
 	],
 	imports: [
 		BrowserModule.withServerTransition({appId: 'bnb'}),
@@ -48,7 +49,6 @@ import { AppRoutingModule, routedComponents }	from './app.routing';
 		HttpModule,
 		BrowserAnimationsModule,
 		AppRoutingModule,
-		YoutubePlayerModule,
 		PerfectScrollbarModule.forRoot({suppressScrollX: true})
 	],
 	providers: [

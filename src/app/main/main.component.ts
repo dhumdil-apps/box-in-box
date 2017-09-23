@@ -3,6 +3,7 @@ import { Router }										from '@angular/router';
 import { HttpGETService }								from '../services/http/get.service';
 import { PerfectScrollbarDirective }	 				from 'ngx-perfect-scrollbar';
 import { HeaderComponent } 								from './header/header.component';
+import { YTContentComponent } 							from '../../srvns/youtube-content/youtube-content.component';
 
 @Component({
 	selector: 'bnb-main',
@@ -17,6 +18,7 @@ export class MainComponent implements OnInit {
 	@ViewChild('bnb') bnb;
 
 	@ViewChild(HeaderComponent) headerComponent: HeaderComponent;
+	@ViewChild(YTContentComponent) ytContentComponent: YTContentComponent;
 
 	@ViewChild(PerfectScrollbarDirective) directiveScroll: PerfectScrollbarDirective;
 
@@ -49,9 +51,11 @@ export class MainComponent implements OnInit {
 		this.handleResize();
 	}
 
-	private onScroll()
+	public onScroll()
 	{
 		this.page['fixed-header'] = (this.getScrollTop() >= (this.page['browser-height'] - 51));
+
+		this.ytContentComponent.minimizeYT();
 
 		if (this.page['header-loaded'] && this.page['full-header'])
 		{

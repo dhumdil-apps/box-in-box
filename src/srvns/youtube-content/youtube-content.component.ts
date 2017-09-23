@@ -1,4 +1,4 @@
-import { Component, Input, AfterViewInit }	from '@angular/core';
+import { Component, Input }		from '@angular/core';
 
 @Component({
 	selector: 'bnb-youtube-content',
@@ -6,43 +6,44 @@ import { Component, Input, AfterViewInit }	from '@angular/core';
 	styleUrls: ['./youtube-content.less']
 })
 
-export class YTContentComponent implements AfterViewInit {
+export class YTContentComponent {
 
-	ids: any;
-	players: any;
+	public ids: any;
+	public activeId: number;
+	public isMiminized: boolean;
+	public isMaximized: boolean;
 
 	@Input() page;
 
 	constructor()
 	{
-		this.ids = [];
-		this.players = [];
+		this.isMaximized = false;
+		this.isMiminized = true;
+		this.activeId = -1;
+
+		this.ids = [
+			'M7lc1UVf-VE?origin=http://example.com',
+			'DuKsiwS5xw'
+		];
 	}
 
-	ngAfterViewInit()
+	public selectID(index: number): void
 	{
-		this.ids = ['qDuKsiwS5xw'];
+		this.activeId = -1;
+		setTimeout(() => {
+			this.maximizeYT();
+			this.activeId = index;
+		}, 10);
 	}
 
-	public savePlayer (player): void
+	public minimizeYT(): void
 	{
-		this.players.push(player);
-		console.log('players', this.players);
+		console.log('minimize');
 	}
 
-	public onStateChange(event): void
+	public maximizeYT(): void
 	{
-		console.log('state', event.data);
-	}
-
-	public playVideo(i): void
-	{
-		this.players[i].playVideo();
-	}
-
-	public pauseVideo(i: number): void
-	{
-		this.players[i].pauseVideo();
+		console.log('maximize');
 	}
 
 }
