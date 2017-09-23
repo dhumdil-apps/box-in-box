@@ -8,22 +8,15 @@
 			"show":		true
 		},
 		{
-			"type":		"content",
-			"title":	"Videa",
-			"id":		"/",
+			"type":		"scroll",
+			"title":	"Video",
+			"id":		"content",
 			"icon":		"play.svg",
 			"show":		true
 		},
 		{
-			"type":		"content",
-			"title":	"Fotky",
-			"id":		"/",
-			"icon":		"image.svg",
-			"show":		false
-		},
-		{
 			"type":		"scroll",
-			"title":	"About",
+			"title":	"O Nas",
 			"id":		"footer",
 			"icon":		"name-black.svg",
 			"show":		true

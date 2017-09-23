@@ -2,18 +2,18 @@
     "data": {
 		"contact": {
 			"data": {
-				"title": "The Lord Of The Rings",
+				"title": "Stretnutie Rumunskych Veriacich Na Slovensku",
 				"name": {
 					"icon": "name.svg",
-					"name": "Gandalf the Gray",
-					"phone": "+421 123 456 789",
-					"mail": "gandalf.the.gray@gmail.com"
+					"name": "Janko Gaidos",
+					"phone": "+ 421 123 456 789",
+					"mail": "address@mail.com"
 				},
 				"location": {
 					"icon": "location.svg",
-					"address": "Middle-Earth 16",
-					"city": "Auckland",
-					"country": "New Zealand"
+					"address": "Tehelná 12, 915 01",
+					"city": "Nové Mesto nad Váhom",
+					"country": "Slovensko"
 				},
 				"description": {
 					"title": "„Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit“",

@@ -2,6 +2,9 @@
 
     <div class="navigation_container" *ngIf="!navigation.loading" [ngClass]="{'full': page['full-header'] }">
 
+    	<!-- click catcher -->
+		<div class="click-catcher {{ navigation.isVisible ? 'fade-in-catcher' :  'fade-out-catcher' }}" (click)="closeMenu()"></div>
+
 		<bnb-link class="menu"
 				  [link]="navigation.menu"
 				  [path]="page['path']"
@@ -39,9 +42,6 @@
     </div>
 
 </div>
-
-<!-- click catcher -->
-<div class="click-catcher {{ navigation.isVisible ? 'click-catcher-in' :  'click-catcher-out' }}" (click)="closeMenu()"></div>
 
 <!-- space after switching to fixed position -->
 <div class="space" *ngIf="page['fixed-header']"></div>

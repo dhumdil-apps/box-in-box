@@ -23,6 +23,10 @@ bnb-slider {
 	min-height: calc(100% - 50px);
 }
 
+.links bnb-link div.flex.first-flex {
+	display: none;
+}
+
 @keyframes fade-in-page {
 	from {
 		opacity: 0;

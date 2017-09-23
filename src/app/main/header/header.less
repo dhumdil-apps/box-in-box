@@ -40,7 +40,6 @@
 }
 
 .click-catcher {
-    position: fixed;
     top: 0;
 	left: 0;
 	width: 100%;
@@ -48,14 +47,15 @@
 	z-index: -1;
 	overflow: hidden;
 }
-.click-catcher-in {
-	animation: fade-in 300ms ease-in;
+.fade-in-catcher {
+	position: fixed;
+	animation: fade-in-catcher 300ms ease-in;
 	z-index: 1250;
 	background: rgba(0,0,0, .7);
-	left: 250px;
 }
-.click-catcher-out {
-	animation: fade-out 300ms ease-in;
+.fade-out-catcher {
+	position: absolute;
+	animation: fade-out-catcher 300ms ease-in;
 }
 
 .navigation-bar {
@@ -74,6 +74,7 @@
 }
 
 .full {
+	z-index: 2250;
 	margin: 0;
 	width: 100%;
 
@@ -89,6 +90,7 @@
 		top: 0;
 		left: 0;
 		z-index: 1250;
+		z-index: 2250;
 
 		.links {
 			display: block;
@@ -111,25 +113,23 @@
 	}
 }
 
-@keyframes fade-in {
+@keyframes fade-in-catcher {
 	from {
-		left: 0;
 		background: rgba(0,0,0, 0);
 	}
 	to {
-		left: 250px;
 		background: rgba(0,0,0, .7);
 	}
 }
 
-@keyframes fade-out {
+@keyframes fade-out-catcher {
 	from {
-		left: 250px;
+		position: fixed;
 		background: rgba(0,0,0, .7);
 		z-index: 1250;
 	}
 	to {
-		left: 0;
+		position: fixed;
 		background: rgba(0,0,0, 0);
 		z-index: 1250;
 	}

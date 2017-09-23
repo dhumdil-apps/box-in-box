@@ -3,7 +3,7 @@ import { Router }										from '@angular/router';
 import { HttpGETService }								from '../services/http/get.service';
 import { PerfectScrollbarDirective }	 				from 'ngx-perfect-scrollbar';
 import { HeaderComponent } 								from './header/header.component';
-import { YTContentComponent } 							from '../../srvns/youtube-content/youtube-content.component';
+import { YTContentComponent } 							from './content/youtube-content/youtube-content.component';
 
 @Component({
 	selector: 'bnb-main',
