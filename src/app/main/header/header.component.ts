@@ -11,6 +11,7 @@ import { Navigation }															from './header.model';
 export class HeaderComponent implements AfterViewInit {
 
 	public navigation: any;
+	public animate: any;
 
 	@Input() page;
 	@Output() navigate = new EventEmitter();
@@ -26,6 +27,7 @@ export class HeaderComponent implements AfterViewInit {
 			'loading': true,
 			'isVisible': false
 		};
+		this.resetAnimation();
 	}
 
 	ngAfterViewInit()
@@ -39,6 +41,14 @@ export class HeaderComponent implements AfterViewInit {
 			this.page['full-header'] =  (this.page['browser-width'] <= ((this.navigation.links.length * 250) + 200));
 			this.navigation.loading = false;
 		});
+	}
+
+	public resetAnimation(): void
+	{
+		this.animate = {
+			'catcher': '',
+			'side-nav': ''
+		}
 	}
 
 	public navigateTo(link: any, index: number): void
@@ -69,6 +79,12 @@ export class HeaderComponent implements AfterViewInit {
 	private showMenu(): void
 	{
 		this.navigation.isVisible = true;
+
+		if (this.animate['catcher'].length === 0)
+		{
+			this.animate['catcher'] = 'fade-out-catcher';
+			this.animate['side-nav'] = 'slide-out-nav';
+		}
 	}
 
 }

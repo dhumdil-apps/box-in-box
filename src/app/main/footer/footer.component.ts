@@ -1,7 +1,6 @@
-import { Component, AfterViewInit, Input }	from '@angular/core';
-import { HttpGETService }					from '../../services/http/get.service';
-import { Footer }							from './footer.model';
-import { Popup } 							from '../../modules/popup/popup.model';
+import { Component, AfterViewInit, Input, Output, EventEmitter } 	from '@angular/core';
+import { HttpGETService }											from '../../services/http/get.service';
+import { Footer }													from './footer.model';
 
 @Component({
 	selector: 'bnb-footer',
@@ -12,16 +11,15 @@ import { Popup } 							from '../../modules/popup/popup.model';
 export class FooterComponent implements AfterViewInit {
 
 	public footer: any;
-	public popup: Popup;
 
 	@Input() page;
+	@Output() popup = new EventEmitter();
 
 	constructor(private getService: HttpGETService)
 	{
 		this.footer = {
 			'loading': true
 		};
-		this.popup = new Popup();
 	}
 
 	ngAfterViewInit()
@@ -33,17 +31,12 @@ export class FooterComponent implements AfterViewInit {
 		});
 	}
 
-	public openPopup(title: string, lines: any): void
+	public openPopup(): void
 	{
-		this.page['popup-is-active'] = true;
-		this.popup.title = title;
-		this.popup.lines = lines;
-		this.popup.isVisible = true;
-	}
-
-	public popupOnClose(): void
-	{
-		this.page['popup-is-active'] = false;
+		this.popup.emit({
+			'title': this.footer.contact.data.description.title,
+			'lines': this.footer.contact.data.description.lines
+		});
 	}
 
 }

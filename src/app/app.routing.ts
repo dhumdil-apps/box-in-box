@@ -2,17 +2,17 @@ import { NgModule } 			from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { NotFoundComponent } 	from './main/content/not-found/not-found.component';
-import { EmptyPageComponent } 	from './main/content/empty-page/empty-page.component';
+import { YTComponent } 			from './main/content/yt/yt.component';
 
 const routes: Routes = [
 	{
 		path: '',
 		pathMatch: 'full',
-		component: EmptyPageComponent
+		component: YTComponent
 	},
 	{
 		path: '**',
-		redirectTo: ''
+		component: NotFoundComponent
 	}
 ];
 
@@ -24,6 +24,6 @@ const routes: Routes = [
 export class AppRoutingModule {}
 
 export const routedComponents = [
-	NotFoundComponent,
-	EmptyPageComponent
+	YTComponent,
+	NotFoundComponent
 ];

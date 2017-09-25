@@ -3,7 +3,8 @@ import { Router }										from '@angular/router';
 import { HttpGETService }								from '../services/http/get.service';
 import { PerfectScrollbarDirective }	 				from 'ngx-perfect-scrollbar';
 import { HeaderComponent } 								from './header/header.component';
-import { YTContentComponent } 							from './content/youtube-content/youtube-content.component';
+import { YTComponent } 									from './content/yt/yt.component';
+import { Popup } 										from '../modules/popup/popup.model';
 
 @Component({
 	selector: 'bnb-main',
@@ -14,15 +15,16 @@ import { YTContentComponent } 							from './content/youtube-content/youtube-con
 export class MainComponent implements OnInit {
 
 	public page: any;
+	public popup: Popup;
 
 	@ViewChild('bnb') bnb;
 
 	@ViewChild(HeaderComponent) headerComponent: HeaderComponent;
-	@ViewChild(YTContentComponent) ytContentComponent: YTContentComponent;
+	@ViewChild(YTComponent) ytContentComponent: YTComponent;
 
 	@ViewChild(PerfectScrollbarDirective) directiveScroll: PerfectScrollbarDirective;
 
-	@HostListener('window:resize', ['$event']) onResize()
+	@HostListener('window:resize') onResize()
 	{
 		this.handleResize();
 	}
@@ -43,7 +45,9 @@ export class MainComponent implements OnInit {
 			'full-header': false,
 			'popup-is-active': false
 		};
-		this.init();
+		// this.init();
+		this.popup = new Popup();
+		this.page['loading'] = false;
 	}
 
 	ngOnInit()
@@ -55,7 +59,7 @@ export class MainComponent implements OnInit {
 	{
 		this.page['fixed-header'] = (this.getScrollTop() >= (this.page['browser-height'] - 51));
 
-		this.ytContentComponent.minimizeYT();
+		// this.ytContentComponent.minimizeYT();
 
 		if (this.page['header-loaded'] && this.page['full-header'])
 		{
@@ -128,6 +132,7 @@ export class MainComponent implements OnInit {
 
 				if (this.page['full-header'])
 				{
+					this.headerComponent.resetAnimation();
 					this.headerComponent.closeMenu();
 				}
 			}
@@ -136,6 +141,13 @@ export class MainComponent implements OnInit {
 		{
 			this.page['browser-height'] = this.bnb.nativeElement.offsetParent.clientHeight;
 		}
+	}
+
+	public openPopup(ev: any): void
+	{
+		this.popup.title = ev.title;
+		this.popup.lines = ev.lines;
+		this.popup.isVisible = true;
 	}
 
 	private getScrollTop(): number

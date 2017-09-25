@@ -2,7 +2,7 @@ import { BrowserModule }						from '@angular/platform-browser';
 import { NgModule }								from '@angular/core';
 import { FormsModule }							from '@angular/forms';
 import { HttpModule }							from '@angular/http';
-import { BrowserAnimationsModule }				from '@angular/platform-browser/animations';
+// import { BrowserAnimationsModule }				from '@angular/platform-browser/animations';
 
 // main
 import { BnbComponent }							from './bnb.component';
@@ -10,8 +10,7 @@ import { MainComponent }						from './main/main.component';
 import { SliderComponent }						from './main/slider/slider.component';
 import { HeaderComponent }						from './main/header/header.component';
 import { FooterComponent }						from './main/footer/footer.component';
-import { EmptyPageComponent } 					from './main/content/empty-page/empty-page.component';
-import { YTContentComponent }					from './main/content/youtube-content/youtube-content.component';
+
 // modules
 import { PopupComponent }						from './modules/popup/popup.component';
 import { DropdownComponent }					from './modules/dropdown/dropdown.component';
@@ -24,6 +23,7 @@ import { SafePipe } 							from './services/sanitize/dom-sanitizer';
 
 // external
 import { PerfectScrollbarModule } 				from 'ngx-perfect-scrollbar';
+import { YoutubePlayerModule } 					from 'ng2-youtube-player';
 
 // router
 import { AppRoutingModule, routedComponents }	from './app.routing';
@@ -35,8 +35,6 @@ import { AppRoutingModule, routedComponents }	from './app.routing';
 		SliderComponent,
 		HeaderComponent,
 		FooterComponent,
-		EmptyPageComponent,
-		YTContentComponent,
 		PopupComponent,
 		DropdownComponent,
 		LinkComponent,
@@ -47,9 +45,10 @@ import { AppRoutingModule, routedComponents }	from './app.routing';
 		BrowserModule.withServerTransition({appId: 'bnb'}),
 		FormsModule,
 		HttpModule,
-		BrowserAnimationsModule,
+		// BrowserAnimationsModule,
 		AppRoutingModule,
-		PerfectScrollbarModule.forRoot({suppressScrollX: true})
+		PerfectScrollbarModule.forRoot({suppressScrollX: true}),
+		YoutubePlayerModule
 	],
 	providers: [
 		HttpGETService,

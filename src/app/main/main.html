@@ -1,21 +1,19 @@
 <!-- BOX IN BOX -->
-<div class="main {{ page['popup-is-active'] ? 'hide-scrollbar' : '' }}" #bnb [ngClass]="{'full': page['full-header']}" [perfectScrollbar]="{}" (scroll)="onScroll()">
+<div class="main {{ popup.isVisible? 'hide-scrollbar' : '' }} {{ page['full-header'] ? 'full' : '' }}" #bnb [ngClass]="{'': false}" [perfectScrollbar]="{}" (scroll)="onScroll()">
 
-	<bnb-empty-page></bnb-empty-page>
+	<!-- Slider (welcome screen) -->
+	<bnb-slider *ngIf="!page['loading']" (popup)="openPopup($event)"></bnb-slider>
 
-	<!-- slider (welcome screen) -->
-	<bnb-slider *ngIf="!page['loading']" [page]="page"></bnb-slider>
-
-	<!-- header (navigation) -->
+	<!-- Header (navigation) -->
 	<bnb-header *ngIf="!page['loading']" [page]="page" (navigate)="navigateTo($event)"></bnb-header>
 
-	<!-- content -->
+	<!-- Content -->
 	<router-outlet></router-outlet>
 
-	<!-- YT -->
-	<bnb-youtube-content [page]="page"></bnb-youtube-content>
+	<!-- Footer (contact) -->
+	<bnb-footer *ngIf="page['header-loaded']" [page]="page" (popup)="openPopup($event)"></bnb-footer>
 
-	<!-- footer (contact) -->
-	<bnb-footer *ngIf="!page['loading']" [page]="page"></bnb-footer>
+	<!-- Popup (read more) -->
+	<bnb-popup *ngIf="popup.isVisible" [popup]="popup"></bnb-popup>
 
 </div>

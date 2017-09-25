@@ -2,21 +2,21 @@
     "data": [
 		{
 			"type":		"scroll",
-			"title":	"BNB",
+			"title":	"",
 			"id":		"header",
 			"icon":		"logo.png",
 			"show":		true
 		},
 		{
-			"type":		"scroll",
-			"title":	"Video",
-			"id":		"content",
+			"type":		"content",
+			"title":	"VIDEOARCHÍV",
+			"id":		"/",
 			"icon":		"play.svg",
 			"show":		true
 		},
 		{
 			"type":		"scroll",
-			"title":	"O Nas",
+			"title":	"KONTAKT",
 			"id":		"footer",
 			"icon":		"name-black.svg",
 			"show":		true

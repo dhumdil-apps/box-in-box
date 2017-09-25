@@ -4,20 +4,12 @@
 	left: 0;
     width: 100%;
 	min-height: 100%;
-	background: rgba(0,0,0, 0.5);
+	background: #fff;
 	overflow: hidden;
 
 	&:hover {
 		.btns {
-			animation-name: pulse-size;
-
-			> div {
-				> div {
-					> div {
-						animation-name: pulse-colors;
-					}
-				}
-			}
+			animation: pulse-size 300ms ease-in;
 		}
 	}
 	.animate img {
@@ -68,6 +60,8 @@
 		position: absolute;
 		top: 50%;
 		left: 50%;
+		width: 100%;
+		height: 100%;
 		transform: translate3d(-50%, -50%, 0);
 		visibility: hidden;
 	}
@@ -97,14 +91,24 @@
 	left: 0;
 	width: 100%;
 	height: 50px;
-	animation-duration: .4s;
-	animation-fill-mode: both;
 	z-index: 150;
 	opacity: 0.5;
+	transition: all 200ms ease-in;
 
 	&:hover {
 		opacity: 1;
-		background: rgba(0,0,0, .3);
+		background: rgba(255,255,255, .25);
+		-webkit-box-shadow: 0 0 50px -10px rgba(255, 255, 255, 0.5);
+		-moz-box-shadow: 0 0 50px -10px rgba(255, 255, 255, 0.5);
+		box-shadow: 0 0 50px -10px rgba(255, 255, 255, 0.5);
+
+		> div {
+			> div {
+				> div {
+					border: 2px solid #000;
+				}
+			}
+		}
 	}
 	> div {
 		display: flex;
@@ -117,34 +121,21 @@
 
 			&:hover {
 				> div {
-					background: #eee;
+					background: #333;
 				}
 			}
 			> div {
 				position: relative;
-				width: 7px;
-				height: 7px;
+				width: 10px;
+				height: 10px;
 				background: transparent;
 				border-radius: 50%;
 				border: 2px solid #333;
-				animation-duration: .6s;
-				animation-fill-mode: both;
 			}
 			.active {
 				background: #333;
 			}
 		}
-	}
-}
-
-@keyframes pulse-colors {
-	from {
-		background: #eee;
-	}
-	50% {
-		background: #000;
-	}
-	to {
 	}
 }
 

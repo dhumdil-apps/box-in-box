@@ -1,11 +1,8 @@
 
 /* The Perfect Scrollbar Doesn't E... What what?? */
 @import '~perfect-scrollbar/dist/css/perfect-scrollbar.min.css';
-.ps__scrollbar-y-rail {
+.ps__scrollbar-y-rail, .ps__scrollbar-x-rail {
 	z-index: 10000;
-}
-.ps__scrollbar-x-rail {
-	display: none;
 }
 .hide-scrollbar.ps.ps--active-y>.ps__scrollbar-y-rail {
 	display: none;
@@ -23,8 +20,9 @@ bnb-slider {
 	min-height: calc(100% - 50px);
 }
 
-.links bnb-link div.flex.first-flex {
-	display: none;
+/* on full view change the look of header */
+.full .links .first-flex {
+	display: none !important;
 }
 
 @keyframes fade-in-page {
@@ -36,6 +34,6 @@ bnb-slider {
 	}
 }
 
-.empty-page, .page-not-found {
+.yt, .page-not-found {
 	animation: fade-in-page 300ms ease-out;
 }

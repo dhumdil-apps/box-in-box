@@ -4,6 +4,9 @@
 	height: 100%;
 	background: #fff;
 	z-index: 200;
+	animation: fade-in-main 1s ease-in;
+	min-width: 300px;
+	min-height: 500px;
 
 	&:before {
 		display: block;
@@ -12,5 +15,17 @@
 		width: 100%;
 		height: ~"calc(100% - 50px)";
 		background: #fff;
+	}
+}
+
+@keyframes fade-in-main {
+	from {
+		transform: translate3d(0, 100%, 0);
+	}
+	70% {
+		transform: translate3d(0, 100%, 0);
+	}
+	to {
+		transform: none;
 	}
 }

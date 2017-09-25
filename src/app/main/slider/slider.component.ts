@@ -1,7 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { HttpGETService }		from '../../services/http/get.service';
 import { Slider }				from './slider.model';
-import { Popup } 				from '../../modules/popup/popup.model';
 
 @Component({
 	selector: 'bnb-slider',
@@ -11,18 +10,16 @@ import { Popup } 				from '../../modules/popup/popup.model';
 
 export class SliderComponent {
 
-	public popup: Popup;
 	public slider: any;
 	public selectedIndexes = [];
 
-	@Input() page;
+	@Output() popup = new EventEmitter();
 
 	constructor(private getService: HttpGETService)
 	{
 		this.slider = {
 			'loading': true
 		};
-		this.popup = new Popup();
 		this.getService.get('slider.json').subscribe(data => {
 			this.slider = new Slider(data);
 			this.setAutoSlideOn();
@@ -110,39 +107,14 @@ export class SliderComponent {
 		return ((index === this.slider.activeSlide) ? 'animate' : 'hide');
 	}
 
-	public w(index: number): number
+	public openPopup(title: string, lines: any): void
 	{
-		// if (this.slider.slides[index].w < this.page['browser-width'])
-		// {
-		// 	//TODO: resize
-		// }
-		return (this.page['browser-width']);
-	}
+		this.popup.emit({'title': title, 'lines': lines});
 
-	public h(index: number): number
-	{
-		// if (this.slider.slides[index].h < this.page['browser-height'] - 50)
-		// {
-		// 	// TODO: resize
-		// }
-		return (this.page['browser-height'] - 50);
-	}
-
-	public openPopup(title: string, desc: any): void
-	{
 		if (this.slider.isAutoSlideOn)
 		{
 			this.setAutoSlideOff();
 		}
-		this.page['popup-is-active'] = true;
-		this.popup.isVisible = true;
-		this.popup.title = title;
-		this.popup.lines = desc;
-	}
-
-	public popupOnClose(): void
-	{
-		this.page['popup-is-active'] = false;
 	}
 
 }

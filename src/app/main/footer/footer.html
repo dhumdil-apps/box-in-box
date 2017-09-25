@@ -60,7 +60,7 @@
 						<h2>{{ footer.contact.data.description.title }}</h2>
 					</div>
 					<div class="layout-row">
-						<h3 (click)="openPopup(footer.contact.data.description.title, footer.contact.data.description.lines)">{{ footer.contact.data.description['read-more'] }}</h3>
+						<h3 (click)="openPopup()">{{ footer.contact.data.description['read-more'] }}</h3>
 					</div>
 				</div>
 
@@ -70,5 +70,3 @@
 	</div>
 
 </div>
-
-<bnb-popup *ngIf="popup.isVisible" [popup]="popup" (close)="popupOnClose()"></bnb-popup>

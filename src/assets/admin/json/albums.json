@@ -1,0 +1,52 @@
+{
+	"data": [
+		{
+			"title": "03.24.2017",
+			"img": "assets/admin/img/YT/Koala.jpg",
+			"videos": [
+				{
+					"title": "Video 01",
+					"img": "",
+					"id": "ru5DJRh5tQE"
+				},
+				{
+					"title": "Video 02",
+					"img": "",
+					"id": "M7lc1UVf-VE?origin=http://example.com"
+				}
+			]
+		},
+		{
+			"title": "03.23.2016",
+			"img": "assets/admin/img/YT/Penguins.jpg",
+			"videos": [
+				{
+					"title": "Video 01",
+					"img": "",
+					"id": "M7lc1UVf-VE?origin=http://example.com"
+				},
+				{
+					"title": "Video 02",
+					"img": "",
+					"id": "M7lc1UVf-VE?origin=http://example.com"
+				}
+			]
+		},
+		{
+			"title": "09.11.2015",
+			"img": "assets/admin/img/YT/Tulips.jpg",
+			"videos": [
+				{
+					"title": "Video 01",
+					"img": "",
+					"id": "M7lc1UVf-VE?origin=http://example.com"
+				},
+				{
+					"title": "Video 02",
+					"img": "",
+					"id": "M7lc1UVf-VE?origin=http://example.com"
+				}
+			]
+		}
+	]
+}

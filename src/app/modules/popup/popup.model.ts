@@ -7,12 +7,8 @@ export class Popup {
 	constructor()
 	{
 		this.isVisible = false;
-		this.title = 'Title';
-		this.lines = [
-			'Line 1',
-			'Line 2',
-			'...'
-		];
+		this.title = '';
+		this.lines = [];
 	}
 
 }
