@@ -1,26 +1,30 @@
-import { Component, ViewChild, HostListener, OnInit }	from '@angular/core';
+import { Component, ViewChild, HostListener, OnInit } 	from '@angular/core';
 import { Router }										from '@angular/router';
 import { HttpGETService }								from '../services/http/get.service';
 import { PerfectScrollbarDirective }	 				from 'ngx-perfect-scrollbar';
 import { HeaderComponent } 								from './header/header.component';
-import { YTComponent } 									from './content/yt/yt.component';
 import { Popup } 										from '../modules/popup/popup.model';
+import { YTService } 									from '../services/communicate/yt.service';
 
 @Component({
 	selector: 'bnb-main',
 	templateUrl: './main.html',
-	styleUrls: ['./main.less']
+	styleUrls: ['./main.less'],
+	providers: [ YTService ]
 })
 
 export class MainComponent implements OnInit {
 
 	public page: any;
+
 	public popup: Popup;
+
+	public player: any;
+	public videoId = '';
 
 	@ViewChild('bnb') bnb;
 
 	@ViewChild(HeaderComponent) headerComponent: HeaderComponent;
-	@ViewChild(YTComponent) ytContentComponent: YTComponent;
 
 	@ViewChild(PerfectScrollbarDirective) directiveScroll: PerfectScrollbarDirective;
 
@@ -29,7 +33,7 @@ export class MainComponent implements OnInit {
 		this.handleResize();
 	}
 
-	constructor(private router: Router, private getService: HttpGETService)
+	constructor(private router: Router, private getService: HttpGETService, private ytService: YTService)
 	{
 		this.page = {
 			'browser-height': 0, // user's web browser
@@ -48,6 +52,28 @@ export class MainComponent implements OnInit {
 		// this.init();
 		this.popup = new Popup();
 		this.page['loading'] = false;
+
+		// youtube player
+		ytService.onSelectId$.subscribe((id) =>
+		{
+			console.log('yt-player:', id);
+
+			this.videoId = ''; // deselect
+
+			setTimeout(() =>
+			{
+				this.videoId = id; // reselect
+			}, 10);
+		});
+		ytService.onPause$.subscribe(() =>
+		{
+			this.pauseVideo();
+		});
+		ytService.onPlay$.subscribe(() =>
+		{
+			this.playVideo();
+		});
+
 	}
 
 	ngOnInit()
@@ -58,8 +84,6 @@ export class MainComponent implements OnInit {
 	public onScroll()
 	{
 		this.page['fixed-header'] = (this.getScrollTop() >= (this.page['browser-height'] - 51));
-
-		// this.ytContentComponent.minimizeYT();
 
 		if (this.page['header-loaded'] && this.page['full-header'])
 		{
@@ -163,6 +187,29 @@ export class MainComponent implements OnInit {
 	private getScrollHeight(): number
 	{
 		return this.bnb.nativeElement.scrollHeight;
+	}
+
+	public savePlayer(player): void
+	{
+		console.log('player instance', player);
+		this.player = player;
+		this.playVideo();
+	}
+
+	public onStateChange(event): void
+	{
+		console.log('player state', event.data);
+		this.ytService.stateChanged(event.data);
+	}
+
+	public playVideo(): void
+	{
+		this.player.playVideo();
+	}
+
+	public pauseVideo(): void
+	{
+		this.player.pauseVideo();
 	}
 
 }

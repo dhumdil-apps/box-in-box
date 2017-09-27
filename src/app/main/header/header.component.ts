@@ -15,6 +15,8 @@ export class HeaderComponent implements AfterViewInit {
 
 	@Input() page;
 	@Output() navigate = new EventEmitter();
+	@Output() play = new EventEmitter();
+	@Output() pause = new EventEmitter();
 
 	@HostListener('window:resize', ['$event']) onResize()
 	{

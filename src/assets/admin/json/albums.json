@@ -1,34 +1,97 @@
 {
 	"data": [
 		{
-			"title": "03.24.2017",
-			"img": "assets/admin/img/YT/Koala.jpg",
+			"title": "25. marca 2017",
+			"verse": [
+				"Ja som cesta, pravda i život.",
+				"Nik neprichádza k Otcovi, ak len nie skrze mňa."
+			],
+			"img": "assets/admin/img/YT/feathers.jpg",
 			"videos": [
 				{
-					"title": "Video 01",
-					"img": "",
+					"title": "TEST 1",
 					"id": "ru5DJRh5tQE"
 				},
 				{
-					"title": "Video 02",
-					"img": "",
-					"id": "M7lc1UVf-VE?origin=http://example.com"
+					"title": "TEST 2",
+					"id": "LAdAjOsnpdM"
+				},
+				{
+					"title": "Passenger | Let Her Go (Official Video)",
+					"id": "RBumgq5yVrA"
+				},
+				{
+					"title": "TEST 1",
+					"id": "ru5DJRh5tQE"
+				},
+				{
+					"title": "TEST 2",
+					"id": "LAdAjOsnpdM"
+				},
+				{
+					"title": "Passenger | Let Her Go (Official Video)",
+					"id": "RBumgq5yVrA"
+				},
+				{
+					"title": "TEST 1",
+					"id": "ru5DJRh5tQE"
+				},
+				{
+					"title": "TEST 2",
+					"id": "LAdAjOsnpdM"
+				},
+				{
+					"title": "Passenger | Let Her Go (Official Video)",
+					"id": "RBumgq5yVrA"
+				}
+			]
+		},
+		{
+			"title": "26. marca 2016",
+			"verse": [
+				"Ale naša vlasť je v nebesiach,",
+				"odkiaľ očakávame aj Spasiteľa, Pána Ježiša Krista."
+			],
+			"img": "assets/admin/img/YT/Koala.jpg",
+			"videos": [
+				{
+					"title": "TEST 1",
+					"id": "ru5DJRh5tQE"
+				},
+				{
+					"title": "TEST 2",
+					"id": "LAdAjOsnpdM"
+				}
+			]
+		},
+		{
+			"title": "09.11.2015",
+			"img": "assets/admin/img/YT/rails.jpg",
+			"videos": [
+				{
+					"title": "TEST 1",
+					"id": "ru5DJRh5tQE"
+				},
+				{
+					"title": "TEST 2",
+					"id": "LAdAjOsnpdM"
 				}
 			]
 		},
 		{
 			"title": "03.23.2016",
+			"verse": [
+				"Už nežijem ja, ale žije vo mne Kristus"
+			],
 			"img": "assets/admin/img/YT/Penguins.jpg",
 			"videos": [
 				{
-					"title": "Video 01",
-					"img": "",
-					"id": "M7lc1UVf-VE?origin=http://example.com"
+					"title": "TEST 1",
+					"id": "ru5DJRh5tQE"
 				},
 				{
-					"title": "Video 02",
-					"img": "",
-					"id": "M7lc1UVf-VE?origin=http://example.com"
+					"title": "TEST 2",
+					"id": "LAdAjOsnpdM"
 				}
 			]
 		},
@@ -37,14 +100,12 @@
 			"img": "assets/admin/img/YT/Tulips.jpg",
 			"videos": [
 				{
-					"title": "Video 01",
-					"img": "",
-					"id": "M7lc1UVf-VE?origin=http://example.com"
+					"title": "TEST 1",
+					"id": "ru5DJRh5tQE"
 				},
 				{
-					"title": "Video 02",
-					"img": "",
-					"id": "M7lc1UVf-VE?origin=http://example.com"
+					"title": "TEST 2",
+					"id": "LAdAjOsnpdM"
 				}
 			]
 		}

@@ -1,63 +1,57 @@
-<div class="yt {{ yt['style'] }}">
+<div #ytStyle class="yt {{ yt['style'] }}">
 
 	<!-- Albums -->
-	<div class="albums" *ngIf="!yt.loading" >
+	<div class="albums" *ngIf="!yt.loading">
 
-		<div class="album {{ getStyle(i) }}" *ngFor="let album of yt.albums; let i = index">
+		<div class="album {{ getStyle(i) }} {{ (isActiveAlbum(i) && highlightAlbum) ? 'highlight' : '' }}" *ngFor="let album of yt.albums; let i = index" [style.width.px]="yt['size']" [style.height.px]="yt['size']">
 
-			<!-- Album Cover -->
+			<!-- Album Cover - Open Album -->
 			<div class="album-cover" (click)="openAlbum(i)">
 				<img src="{{ album.img }}" />
 				<h1>{{ album.title }}</h1>
 			</div>
 
-			<!-- Unfocused Cover -->
+			<!-- Unfocused Cover - Focus/Highlight Album -->
 			<div class="click-catcher" (click)="focusAlbum(i)"></div>
 
 		</div>
 
-		<div class="btns">
+		<!-- Navigate - Select Album -->
+		<div class="btns {{ btnsLocked ? 'disabled' : '' }}">
 			<div class="flex"></div>
 
-			<div class="btn" *ngFor="let btn of yt.albums; let i = index">
-				<div class="{{ isActiveAlbum(i) ? 'active' : '' }}" (click)="selectAlbum(i)"></div>
+			<div class="btn" (click)="selectAlbum(i)" *ngFor="let btn of yt.albums; let i = index">
+				<div class="{{ isActiveAlbum(i) ? 'active' : '' }}"></div>
 			</div>
 
 			<div class="flex"></div>
 		</div>
 
-	</div>
+		<!-- Album -->
+		<div *ngIf="yt['album-id'] !== -1" class="video-popup">
 
-	<!-- Album -->
-	<div *ngIf="yt['active-album'] !== -1" class="video-popup">
+			<!-- Photo Album -->
+			<div class="video-content" [style.width.px]="yt['size']" [style.height.px]="yt['size']">
+				<img src="{{ yt.albums[yt['album-id']].img }}" />
+			</div>
 
-		<!-- Video -->
-		<div class="video-content">
+			<!-- Video playlist -->
+			<div class="album-content" [perfectScrollbar]="{}">
 
-			<youtube-player *ngIf 		= "yt['active-id'].length > 0"
-							width		= "500"
-							height		= "500"
-							[videoId]	= "yt['active-id']"
-							(ready)		= "savePlayer($event)"
-							(change)	= "onStateChange($event)"
-			></youtube-player>
-
-			<img src="{{ yt.albums['active-album'].img }}" *ngIf="yt['active-id'].length === 0" />
-
-		</div>
-
-		<!-- Album Content -->
-		<div class="album-content">
-
-			<div *ngFor="let video of yt.albums[yt['active-album']].videos">
-
-				<!-- video cover -->
-				<img class="video-cover" src="{{ video.img }}"/>
-				<h1 class="video-title" (click)="selectVideo(video.id)">{{ video.title }}</h1>
+				<div (click)="selectVideo(video.id)" *ngFor="let video of yt.albums[yt['album-id']].videos">
+					<div>
+						<img *ngIf="false" (click)="playVideo()" src="{{ basePath + 'play_outline.svg' }}" />
+						<img *ngIf="false" (click)="pauseVideo()" src="{{ basePath + 'pause_outline.svg' }}" />
+						<div *ngIf="true" class='uil-ring-css loader' style='transform:scale(1);'><div></div></div>
+					</div>
+					<h1 class="video-title">{{ video.title }}</h1>
+				</div>
 
 			</div>
+
+			<img class="close-album" (click)="closeAlbum()" src="{{ basePath + 'close_black.svg' }}" />
+
 		</div>
 
 	</div>
-
 </div>

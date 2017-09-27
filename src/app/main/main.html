@@ -1,19 +1,39 @@
 <!-- BOX IN BOX -->
-<div class="main {{ popup.isVisible? 'hide-scrollbar' : '' }} {{ page['full-header'] ? 'full' : '' }}" #bnb [ngClass]="{'': false}" [perfectScrollbar]="{}" (scroll)="onScroll()">
+<div #bnb (scroll)="onScroll()" class="main {{ popup.isVisible? 'hide-scrollbar' : '' }} {{ page['full-header'] ? 'full' : '' }}" [ngClass]="{'': false}" [perfectScrollbar]="{}">
 
 	<!-- Slider (welcome screen) -->
-	<bnb-slider *ngIf="!page['loading']" (popup)="openPopup($event)"></bnb-slider>
+	<bnb-slider 	*ngIf		= "!page['loading']"
+					(popup)		= "openPopup($event)"
+	></bnb-slider>
 
 	<!-- Header (navigation) -->
-	<bnb-header *ngIf="!page['loading']" [page]="page" (navigate)="navigateTo($event)"></bnb-header>
+	<bnb-header 	*ngIf		= "!page['loading']"
+					[page]		= "page"
+				   	(play)		= "playVideo()"
+				   	(pause)		= "pauseVideo()"
+					(navigate)	= "navigateTo($event)"
+	></bnb-header>
 
 	<!-- Content -->
 	<router-outlet></router-outlet>
 
 	<!-- Footer (contact) -->
-	<bnb-footer *ngIf="page['header-loaded']" [page]="page" (popup)="openPopup($event)"></bnb-footer>
+	<bnb-footer 	*ngIf		= "page['header-loaded']"
+					[page]		= "page"
+					(popup)		= "openPopup($event)"
+	></bnb-footer>
 
 	<!-- Popup (read more) -->
-	<bnb-popup *ngIf="popup.isVisible" [popup]="popup"></bnb-popup>
+	<bnb-popup 		*ngIf		= "popup.isVisible"
+					[popup]		= "popup"></bnb-popup>
+
+	<!-- Youtube Player -->
+	<youtube-player *ngIf 		= "videoId.length > 0"
+					width		= "100%"
+					height		= "100%"
+					[videoId]	= "videoId"
+					(ready)		= "savePlayer($event)"
+					(change)	= "onStateChange($event)"
+	></youtube-player>
 
 </div>

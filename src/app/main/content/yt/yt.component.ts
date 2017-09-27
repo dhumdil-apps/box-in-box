@@ -1,5 +1,7 @@
-import { Component, AfterViewInit } 	from '@angular/core';
-import { HttpGETService } 				from '../../../services/http/get.service';
+import { Component, ViewChild, HostListener, AfterViewInit, OnDestroy } from '@angular/core';
+import { Subscription }   												from 'rxjs/Subscription';
+import { HttpGETService } 												from '../../../services/http/get.service';
+import { YTService } 													from '../../../services/communicate/yt.service';
 
 @Component({
 	selector: 'bnb-yt',
@@ -7,20 +9,38 @@ import { HttpGETService } 				from '../../../services/http/get.service';
 	styleUrls: ['./yt.less']
 })
 
-export class YTComponent implements AfterViewInit {
+export class YTComponent implements AfterViewInit, OnDestroy {
 
 	public yt: any;
-	public player: any;
+	public btnsLocked: boolean;
+	public highlightAlbum: boolean;
+	public basePath = 'assets/app/img/';
+	public subscription: Subscription;
 
-	constructor(private getService: HttpGETService)
+	@ViewChild('ytStyle') ytStyle;
+
+	@HostListener('window:resize') onResize()
+	{
+		this.handleResize();
+	}
+
+	constructor(private getService: HttpGETService, private ytService: YTService)
 	{
 		this.yt = {
 			'loading': true,
-			'active-id': '', // selected video
-			'active-album': -1, // selected album
-			'style': '', // minimized, maximized
+			'album-id': -1, // selected album
+			'active-album': 0, // focused album
+			'style': '',
+			'size': 0,
 			'albums': []
-		}
+		};
+		this.btnsLocked = false;
+		this.highlightAlbum = false;
+
+		this.subscription = ytService.onStateChanged$.subscribe((state) =>
+		{
+			console.log(state);
+		});
 	}
 
 	ngAfterViewInit()
@@ -28,63 +48,54 @@ export class YTComponent implements AfterViewInit {
 		this.getService.get('albums.json').subscribe(data => {
 			this.yt.albums = data;
 			this.yt['loading'] = false;
+			setTimeout(() => {
+				this.handleResize();
+			}, 500);
 		});
 	}
 
-	private savePlayer(player): void
+	private handleResize(): void
 	{
-		this.player = player;
-		console.log('player instance', player)
-	}
-
-	private onStateChange(event): void
-	{
-		console.log('player state', event.data);
+		// console.log(this.ytStyle);
+		this.yt['size'] = this.ytStyle.nativeElement.clientHeight - 100;
 	}
 
 	public selectVideo(id: string): void
 	{
-		this.yt['active-id'] = ''; // deselect
-		// this.maximizeYT(); // maximize
-
-		setTimeout(() => {
-			this.yt['active-id'] = id; // reselect
-		}, 10);
-	}
-
-	public minimizeYT(): void
-	{
-		this.yt['style'] = 'minimized';
-	}
-
-	public maximizeYT(): void
-	{
-		this.yt['style'] = 'maximized';
+		this.ytService.selectId(id);
 	}
 
 	public playVideo(): void
 	{
-		this.player.playVideo();
+		this.ytService.play();
 	}
 
 	public pauseVideo(): void
 	{
-		this.player.pauseVideo();
+		this.ytService.pause();
 	}
 
 	public getStyle(index: number): string
 	{
-		if (index === 0)
+		if (index === this.yt['active-album'])
 		{
 			return 'focused';
 		}
-		if (index === 1)
+		if (index === this.yt['active-album'] - 1)
 		{
 			return 'focus-previous'
 		}
-		if (index === 2)
+		if (index === this.yt['active-album'] + 1)
 		{
 			return 'focus-next';
+		}
+		if (index === this.yt['active-album'] - 2)
+		{
+			return 'unfocus-previous';
+		}
+		if (index === this.yt['active-album'] + 2)
+		{
+			return 'unfocus-next';
 		}
 		return '';
 	}
@@ -92,25 +103,79 @@ export class YTComponent implements AfterViewInit {
 	public openAlbum(index: number): void
 	{
 		console.log('openning', index);
+
+		this.yt['album-id'] = index;
+		this.yt['style'] = 'maximized';
+		this.highlightAlbum = false;
+	}
+
+	public closeAlbum(): void
+	{
+		console.log('closing', this.yt['album-id']);
+
+		this.yt.style = '';
+		this.yt['style'] = 'minimized';
+		this.yt['album-id'] = -1;
 	}
 
 	public focusAlbum(index: number): void
 	{
-		console.log('focusing', index);
+		if (this.isActiveAlbum(index))
+		{
+			console.log('highlighting', index);
+			this.highlightAlbum = true;
+		}
+		else
+		{
+			console.log('focusing', index);
+			this.highlightAlbum = false;
+			this.yt['active-album'] = index;
+		}
 	}
 
 	public isActiveAlbum(index: number): boolean
 	{
-		if (index === 0)
-		{
-			return (true);
-		}
-
-		return (false);
+		return (index === this.yt['active-album']);
 	}
 
-	public selectAlbum(index: number): void
+	public selectAlbum(index: number, timeout = false): void
 	{
 		console.log('selecting', index);
+		this.highlightAlbum = false;
+
+		if (timeout || !this.btnsLocked) {
+
+			this.btnsLocked = true;
+
+			if (this.yt['active-album'] > index)
+			{
+				this.yt['active-album']--;
+				console.log('focusing', this.yt['active-album']);
+
+				setTimeout(() => {
+					this.selectAlbum(index, true);
+				}, 100);
+			}
+			else if (this.yt['active-album'] < index)
+			{
+				this.yt['active-album']++;
+				console.log('focusing', this.yt['active-album']);
+
+				setTimeout(() => {
+					this.selectAlbum(index, true);
+				}, 100);
+			}
+			else
+			{
+				this.btnsLocked = false;
+			}
+		}
 	}
+
+	ngOnDestroy()
+	{
+		// prevent memory leak when component destroyed
+		this.subscription.unsubscribe();
+	}
+
 }
