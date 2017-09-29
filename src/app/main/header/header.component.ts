@@ -15,8 +15,9 @@ export class HeaderComponent implements AfterViewInit {
 
 	@Input() page;
 	@Output() navigate = new EventEmitter();
-	@Output() play = new EventEmitter();
-	@Output() pause = new EventEmitter();
+	@Output() close = new EventEmitter();
+	@Output() toggleAlbum = new EventEmitter();
+	@Output() togglePlayer = new EventEmitter();
 
 	@HostListener('window:resize', ['$event']) onResize()
 	{
@@ -87,6 +88,29 @@ export class HeaderComponent implements AfterViewInit {
 			this.animate['catcher'] = 'fade-out-catcher';
 			this.animate['side-nav'] = 'slide-out-nav';
 		}
+	}
+
+	public togglePlayerEvent(): void
+	{
+		this.navigateTo({
+			'id': 'content',
+			'type': 'scroll'
+		}, -1);
+		this.togglePlayer.emit();
+	}
+
+	public toggleAlbumEvent(): void
+	{
+		this.navigateTo({
+			'id': 'content',
+			'type': 'scroll'
+		}, -1);
+		this.toggleAlbum.emit();
+	}
+
+	public closeEvent(): void
+	{
+		this.close.emit();
 	}
 
 }

@@ -1,4 +1,3 @@
-import { Popup } from '../../modules/popup/popup.model';
 
 export class Slider {
 
@@ -13,17 +12,24 @@ export class Slider {
 	{
 		try
 		{
-			data.forEach((slide) => {
-				this.slides.push({
-					'src': slide['src'],
-					'title': slide['title'],
-					'desc': slide['desc'],
-					'w': slide['w'],
-					'h': slide['h']
-				});
+			data.forEach((slide) =>
+			{
+				if (slide['show'])
+				{
+					this.slides.push({
+						'src': slide['src'],
+						'title': slide['title'],
+						'desc': slide['desc'],
+						'w': slide['w'],
+						'h': slide['h']
+					});
+				}
+
 			});
+
 			this.w = this.slides[this.activeSlide].w;
 			this.h = this.slides[this.activeSlide].h;
+
 			this.loading = false;
 		}
 		catch (e)
@@ -33,17 +39,3 @@ export class Slider {
 		}
 	}
 }
-
-/*
-slider.json
-{
-    "data": [
-        {
-            "src": "assets/admin/img/slider/img0.png"
-        },
-        {
-            "src": "assets/admin/img/slider/img1.jpg"
-        }
-    ]
-}
-*/

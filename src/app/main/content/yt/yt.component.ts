@@ -12,9 +12,11 @@ import { YTService } 													from '../../../services/communicate/yt.service
 export class YTComponent implements AfterViewInit, OnDestroy {
 
 	public yt: any;
+
 	public btnsLocked: boolean;
 	public highlightAlbum: boolean;
-	public basePath = 'assets/app/img/';
+	public path: any;
+
 	public subscription: Subscription;
 
 	@ViewChild('ytStyle') ytStyle;
@@ -26,74 +28,162 @@ export class YTComponent implements AfterViewInit, OnDestroy {
 
 	constructor(private getService: HttpGETService, private ytService: YTService)
 	{
-		this.yt = {
-			'loading': true,
-			'album-id': -1, // selected album
-			'active-album': 0, // focused album
-			'style': '',
-			'size': 0,
-			'albums': []
-		};
-		this.btnsLocked = false;
-		this.highlightAlbum = false;
+		this.init();
+
+		this.subscription = ytService.onUpdateSelectedVideo$.subscribe( (album) =>
+		{
+			this.yt ['active-album-index'] = album ['albumIndex'];
+			this.yt ['active-video-index'] = album ['videoIndex'];
+		});
 
 		this.subscription = ytService.onStateChanged$.subscribe((state) =>
 		{
 			console.log(state);
+
+			if (state === 0)
+			{
+				this.yt['active-album-index'] = -1;
+				this.yt['active-video-index'] = -1;
+			}
+			else
+			{
+				this.yt['state'] = state;
+			}
 		});
+
+		this.subscription = ytService.onUpdatePath$.subscribe((path) =>
+		{
+			this.path.admin = path.admin;
+			this.path.app = path.app;
+		});
+
+		this.subscription = ytService.onCloseAlbum$.subscribe(() =>
+		{
+			this.closeAlbum();
+		});
+
+		this.subscription = ytService.onToggleAlbum$.subscribe((albumIndex) =>
+		{
+			this.toggleAlbum(albumIndex);
+		});
+
 	}
 
 	ngAfterViewInit()
 	{
-		this.getService.get('albums.json').subscribe(data => {
-			this.yt.albums = data;
-			this.yt['loading'] = false;
-			setTimeout(() => {
-				this.handleResize();
-			}, 500);
-		});
+		setTimeout(() => {
+
+			const path = this.path ['admin'] + '/albums.json';
+
+			this.getService.get(path).subscribe(data => {
+
+				this.yt.albums = data;
+				this.yt['loading'] = false;
+
+				setTimeout(() => {
+					this.handleResize();
+				}, 100);
+
+			});
+		}, 500);
+	}
+
+	private init(): void
+	{
+		this.btnsLocked = false;
+		this.highlightAlbum = false;
+
+		this.path = {
+			'app': '',
+			'admin': ''
+		};
+
+		this.yt = {
+			'loading': true,
+			'selected-album': 0, // selected album
+			'focused-album': 0, // focused album
+			'active-album-index': -1,
+			'active-video-index': -1,
+			'popup-active': false, // album visibility
+			'size': 0,
+			'state': -2, // loading
+			'albums': []
+		};
 	}
 
 	private handleResize(): void
 	{
-		// console.log(this.ytStyle);
-		this.yt['size'] = this.ytStyle.nativeElement.clientHeight - 100;
+		console.log(this.ytStyle);
+
+		this.yt['size'] = min(this.ytStyle.nativeElement.clientHeight - 100, this.ytStyle.nativeElement.clientWidth / 2);
+
+		function min(x, y) {
+			if (x < y) {
+				return (x);
+			}
+			return (y);
+		}
+
 	}
 
-	public selectVideo(id: string): void
+	public selectVideo(albumIndex: number, videoIndex): void
 	{
-		this.ytService.selectId(id);
+		if (this.isSelectedVideo(albumIndex, videoIndex))
+		{
+			this.playVideo();
+		}
+		else
+		{
+			this.yt['state'] = -2;
+			this.yt['active-album-index'] = albumIndex;
+			this.yt['active-video-index'] = videoIndex;
+			this.ytService.selectVideo({
+				'albumIndex': albumIndex,
+				'videoIndex': videoIndex,
+				'videos': this.yt ['albums'] [albumIndex].videos
+			});
+		}
+	}
+
+	public isSelectedVideo(albumIndex: number, videoIndex: number): boolean
+	{
+		return (this.yt['active-album-index'] === albumIndex && this.yt['active-video-index'] === videoIndex);
 	}
 
 	public playVideo(): void
 	{
-		this.ytService.play();
+		if (this.yt['state'] !== 1)
+		{
+			this.yt['state'] = -3;
+			this.ytService.play();
+		}
 	}
 
 	public pauseVideo(): void
 	{
+		this.yt['state'] = 2;
 		this.ytService.pause();
 	}
 
 	public getStyle(index: number): string
 	{
-		if (index === this.yt['active-album'])
+		if (index === this.yt['focused-album'])
 		{
 			return 'focused';
 		}
-		if (index === this.yt['active-album'] - 1)
+		if (index === this.yt['focused-album'] - 1)
 		{
 			return 'focus-previous'
 		}
-		if (index === this.yt['active-album'] + 1)
+		if (index === this.yt['focused-album'] + 1)
 		{
 			return 'focus-next';
 		}
-		if (index === this.yt['active-album'] - 2)
+		if (index === this.yt['focused-album'] - 2)
 		{
 			return 'unfocus-previous';
 		}
-		if (index === this.yt['active-album'] + 2)
+		if (index === this.yt['focused-album'] + 2)
 		{
 			return 'unfocus-next';
 		}
@@ -102,20 +192,27 @@ export class YTComponent implements AfterViewInit, OnDestroy {
 
 	public openAlbum(index: number): void
 	{
-		console.log('openning', index);
-
-		this.yt['album-id'] = index;
-		this.yt['style'] = 'maximized';
+		console.log('open albumIndex', index);
+		this.yt['selected-album'] = index;
+		this.yt['popup-active'] = true;
 		this.highlightAlbum = false;
+		this.ytService.openAlbum();
 	}
 
 	public closeAlbum(): void
 	{
-		console.log('closing', this.yt['album-id']);
+		console.log('closing', this.yt['selected-album']);
+		this.yt['popup-active'] = false;
+	}
 
-		this.yt.style = '';
-		this.yt['style'] = 'minimized';
-		this.yt['album-id'] = -1;
+	public toggleAlbum(albumIndex: number): void
+	{
+		this.yt['popup-active'] = !this.yt['popup-active'];
+
+		if (albumIndex !== -1)
+		{
+			this.yt['selected-album'] = albumIndex;
+		}
 	}
 
 	public focusAlbum(index: number): void
@@ -129,13 +226,13 @@ export class YTComponent implements AfterViewInit, OnDestroy {
 		{
 			console.log('focusing', index);
 			this.highlightAlbum = false;
-			this.yt['active-album'] = index;
+			this.yt['focused-album'] = index;
 		}
 	}
 
 	public isActiveAlbum(index: number): boolean
 	{
-		return (index === this.yt['active-album']);
+		return (index === this.yt['focused-album']);
 	}
 
 	public selectAlbum(index: number, timeout = false): void
@@ -147,19 +244,19 @@ export class YTComponent implements AfterViewInit, OnDestroy {
 
 			this.btnsLocked = true;
 
-			if (this.yt['active-album'] > index)
+			if (this.yt['focused-album'] > index)
 			{
-				this.yt['active-album']--;
-				console.log('focusing', this.yt['active-album']);
+				this.yt['focused-album']--;
+				console.log('focusing', this.yt['focused-album']);
 
 				setTimeout(() => {
 					this.selectAlbum(index, true);
 				}, 100);
 			}
-			else if (this.yt['active-album'] < index)
+			else if (this.yt['focused-album'] < index)
 			{
-				this.yt['active-album']++;
-				console.log('focusing', this.yt['active-album']);
+				this.yt['focused-album']++;
+				console.log('focusing', this.yt['focused-album']);
 
 				setTimeout(() => {
 					this.selectAlbum(index, true);

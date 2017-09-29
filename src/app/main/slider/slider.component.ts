@@ -1,6 +1,6 @@
-import { Component, Output, EventEmitter } from '@angular/core';
-import { HttpGETService }		from '../../services/http/get.service';
-import { Slider }				from './slider.model';
+import { Component, Input, Output, EventEmitter, AfterViewInit } 	from '@angular/core';
+import { HttpGETService }											from '../../services/http/get.service';
+import { Slider }													from './slider.model';
 
 @Component({
 	selector: 'bnb-slider',
@@ -8,11 +8,12 @@ import { Slider }				from './slider.model';
 	styleUrls: ['./slider.less']
 })
 
-export class SliderComponent {
+export class SliderComponent implements AfterViewInit {
 
 	public slider: any;
 	public selectedIndexes = [];
 
+	@Input() path;
 	@Output() popup = new EventEmitter();
 
 	constructor(private getService: HttpGETService)
@@ -20,7 +21,13 @@ export class SliderComponent {
 		this.slider = {
 			'loading': true
 		};
-		this.getService.get('slider.json').subscribe(data => {
+	}
+
+	ngAfterViewInit()
+	{
+		const path = this.path + '/slider.json';
+
+		this.getService.get(path).subscribe(data => {
 			this.slider = new Slider(data);
 			this.setAutoSlideOn();
 		});

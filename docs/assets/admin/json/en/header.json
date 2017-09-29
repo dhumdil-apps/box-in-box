@@ -2,23 +2,23 @@
     "data": [
 		{
 			"type":		"scroll",
-			"title":	"",
+			"title":	"SRVZNS",
 			"id":		"header",
-			"icon":		"home.svg",
+			"icon":		"logo.png",
 			"show":		true
 		},
 		{
 			"type":		"content",
-			"title":	"EMPTY PAGE",
+			"title":	"ARCHÍV",
 			"id":		"/",
-			"icon":		"",
+			"icon":		"play.svg",
 			"show":		true
 		},
 		{
 			"type":		"scroll",
-			"title":	"FOOTER",
+			"title":	"KONTAKT",
 			"id":		"footer",
-			"icon":		"",
+			"icon":		"name-black.svg",
 			"show":		true
 		}
 	]

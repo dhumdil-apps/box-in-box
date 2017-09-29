@@ -1,6 +1,6 @@
-<div class="navigation" [ngClass]="{'fixed': page['fixed-header']}">
+<div class="navigation {{ (page ['album'] ['active'] || page ['player'] ['active']) ? 'align_left' : '' }}" [ngClass]="{'fixed': page['fixed-header']}">
 
-    <div class="navigation_container" *ngIf="!navigation.loading" [ngClass]="{'full': page['full-header'] }">
+    <div *ngIf="!navigation.loading" class="navigation_container {{ page['full-header'] ? 'full' : '' }}">
 
     	<!-- click catcher -->
 		<div class="click-catcher {{ navigation.isVisible ? 'fade-in-catcher' :  animate['catcher'] }}" (click)="closeMenu()"></div>
@@ -36,6 +36,30 @@
 
 				</div>
 			</div>
+
+		</div>
+
+		<div class="control" *ngIf="page ['album'] ['active'] || page ['player'] ['active']">
+
+			<img *ngIf 	 = "page ['album'] ['active']"
+				 src 	 = "{{ page['path'] + 'album.png' }}"
+				 class 	 = "album"
+				 title	 = "ALBUM"
+				 (click) = "toggleAlbumEvent()"
+			/>
+
+			<img *ngIf 	 = "page ['player'] ['id'].length > 0"
+				 src 	 = "{{ page['path'] + 'youtube.png' }}"
+				 class 	 = "player"
+				 title	 = "PLAYER"
+				 (click) = "togglePlayerEvent()"
+			/>
+
+			<img src 	 = "{{ page['path'] + 'close.svg' }}"
+				 class 	 = "sm"
+				 title	 = "CLOSE"
+				 (click) = "closeEvent()"
+			/>
 
 		</div>
 

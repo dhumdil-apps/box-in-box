@@ -13,6 +13,7 @@ export class Navigation {
 		this.loading = true;
 		this.active = 0;
 		this.isVisible = false;
+
 		this.menu = {
 			'title':	'',
 			'icon':		'menu.svg'

@@ -1,39 +1,53 @@
-<!-- BOX IN BOX -->
+<!-- BOX IN BOX, TODO: component for scrolling-->
 <div #bnb (scroll)="onScroll()" class="main {{ popup.isVisible? 'hide-scrollbar' : '' }} {{ page['full-header'] ? 'full' : '' }}" [ngClass]="{'': false}" [perfectScrollbar]="{}">
 
 	<!-- Slider (welcome screen) -->
-	<bnb-slider 	*ngIf		= "!page['loading']"
-					(popup)		= "openPopup($event)"
+	<bnb-slider *ngIf 	= "!page ['loading']"
+				[path] 	= "page ['langs'] [ page['langIndex'] ]"
+				(popup) = "openPopup($event)"
 	></bnb-slider>
 
 	<!-- Header (navigation) -->
-	<bnb-header 	*ngIf		= "!page['loading']"
-					[page]		= "page"
-				   	(play)		= "playVideo()"
-				   	(pause)		= "pauseVideo()"
-					(navigate)	= "navigateTo($event)"
+	<bnb-header *ngIf 		   = "!page['loading']"
+				[page] 		   = "page"
+				(navigate) 	   = "navigateTo($event)"
+				(close) 	   = "closeAlbumAndPlayer()"
+				(toggleAlbum)  = "toggleAlbum()"
+				(togglePlayer) = "togglePlayer()"
 	></bnb-header>
 
 	<!-- Content -->
-	<router-outlet></router-outlet>
+	<div class="content" [style.width.px]="page['browser-width']" [style.height.px]="page['browser-height'] - 50">
+
+		<!-- Routed Page -->
+		<router-outlet></router-outlet>
+
+		<!-- Youtube Player, TODO: component for player -->
+		<div class="bnb-player {{ page['player'] ['active'] ? 'player_active' : '' }}">
+
+			<!-- TODO: err? -> [videoId] = "page['player'].id" -->
+			<youtube-player *ngIf 	  = "page ['player'] ['id'].length > 0"
+							width	  = "100%"
+							height 	  = "100%"
+							[videoId] = "page ['player'] ['id']"
+							(ready)	  = "savePlayer($event)"
+							(change)  = "onStateChange($event)"
+			></youtube-player>
+
+		</div>
+
+	</div>
 
 	<!-- Footer (contact) -->
-	<bnb-footer 	*ngIf		= "page['header-loaded']"
-					[page]		= "page"
-					(popup)		= "openPopup($event)"
+	<bnb-footer	*ngIf	= "page['header-loaded']"
+			    [page]	= "page"
+			    (popup)	= "openPopup($event)"
 	></bnb-footer>
 
 	<!-- Popup (read more) -->
-	<bnb-popup 		*ngIf		= "popup.isVisible"
-					[popup]		= "popup"></bnb-popup>
-
-	<!-- Youtube Player -->
-	<youtube-player *ngIf 		= "videoId.length > 0"
-					width		= "100%"
-					height		= "100%"
-					[videoId]	= "videoId"
-					(ready)		= "savePlayer($event)"
-					(change)	= "onStateChange($event)"
-	></youtube-player>
+	<bnb-popup 	*ngIf	= "popup.isVisible"
+				[popup]	= "popup"
+	></bnb-popup>
 
 </div>
+

@@ -16,11 +16,8 @@ import { YTService } 									from '../services/communicate/yt.service';
 export class MainComponent implements OnInit {
 
 	public page: any;
-
 	public popup: Popup;
-
 	public player: any;
-	public videoId = '';
 
 	@ViewChild('bnb') bnb;
 
@@ -35,40 +32,38 @@ export class MainComponent implements OnInit {
 
 	constructor(private router: Router, private getService: HttpGETService, private ytService: YTService)
 	{
-		this.page = {
-			'browser-height': 0, // user's web browser
-			'browser-width': 0, // user's web browser
-			'fixed-header': false, // header
-			'scroll-sections': ['header', 'content', 'footer'], // list sections for scrolling
-			'path': 'assets/app/img/', // path to icons
-			'langs':  ['en'],
-			'langIndex': 0,
-			'loading': true,
-			'header-loaded': false,
-			'header-len': 0,
-			'full-header': false,
-			'popup-is-active': false
-		};
-		// this.init();
-		this.popup = new Popup();
-		this.page['loading'] = false;
+		this.init();
 
-		// youtube player
-		ytService.onSelectId$.subscribe((id) =>
+		ytService.onSelectVideo$.subscribe((album) =>
 		{
-			console.log('yt-player:', id);
+			console.log('album:', album);
 
-			this.videoId = ''; // deselect
+			this.scrollTo('content');
 
-			setTimeout(() =>
-			{
-				this.videoId = id; // reselect
-			}, 10);
+			this.page ['player'] ['loading'] = true;
+
+			this.page ['album'] ['active'] = true;
+			this.page ['album'] ['videos'] = album.videos;
+			this.page ['album'] ['albumIndex'] = album.albumIndex;
+			this.page ['album'] ['videoIndex'] = album.videoIndex;
+
+			this.updateVideoId();
 		});
+
+		ytService.onOpenAlbum$.subscribe(() =>
+		{
+			this.scrollTo('content');
+			this.page ['album'] ['active'] = false;
+			setTimeout(() => {
+				this.page ['album'] ['active'] = true;
+			}, 20);
+		});
+
 		ytService.onPause$.subscribe(() =>
 		{
 			this.pauseVideo();
 		});
+
 		ytService.onPlay$.subscribe(() =>
 		{
 			this.playVideo();
@@ -81,19 +76,42 @@ export class MainComponent implements OnInit {
 		this.handleResize();
 	}
 
-	public onScroll()
-	{
-		this.page['fixed-header'] = (this.getScrollTop() >= (this.page['browser-height'] - 51));
-
-		if (this.page['header-loaded'] && this.page['full-header'])
-		{
-			this.headerComponent.closeMenu();
-		}
-	}
-
 	private init()
 	{
+		this.page = {
+			'path': 'assets/app/img/', // path to icons
+			'browser-height': 0, // user's web browser
+			'browser-width': 0, // user's web browser
+			'fixed-header': false, // header
+			'scroll-sections': ['header', 'content', 'footer'], // list sections for scrolling
+			'langs':  ['en'],
+			'langIndex': 0,
+			'loading': true,
+			'header-loaded': false,
+			'header-len': 0,
+			'full-header': false,
+			'popup-is-active': false,
+			'player': {}, // youtube player visibility
+			'album': {}, // album visibility
+		};
+
+		this.popup = new Popup();
+
+		this.page['player'] = {
+			'active': false,
+			'id': '',
+			'loading': false
+		};
+
+		this.page['album'] = {
+			'active': false,
+			'albumIndex': -1,
+			'videoIndex': -1,
+			'videos': []
+		};
+
 		this.getService.get('app.json').subscribe(data => {
+
 			try
 			{
 				this.page['langs'] = data['langs'];
@@ -104,8 +122,26 @@ export class MainComponent implements OnInit {
 				this.page['langs'] = ['en'];
 				this.page['langIndex'] = 0;
 			}
+
+			this.ytService.updatePath({
+				'app': this.page ['path'],
+				'admin': this.page ['langs'] [ this.page['langIndex'] ]
+			});
+
 			this.page['loading'] = false;
+
 		});
+
+	}
+
+	public onScroll()
+	{
+		this.page['fixed-header'] = (this.getScrollTop() >= (this.page['browser-height'] - 51));
+
+		if (this.page['header-loaded'] && this.page['full-header'])
+		{
+			this.headerComponent.closeMenu();
+		}
 	}
 
 	public navigateTo(navigation: any): void
@@ -191,7 +227,7 @@ export class MainComponent implements OnInit {
 
 	public savePlayer(player): void
 	{
-		console.log('player instance', player);
+		console.log('player', player);
 		this.player = player;
 		this.playVideo();
 	}
@@ -199,7 +235,20 @@ export class MainComponent implements OnInit {
 	public onStateChange(event): void
 	{
 		console.log('player state', event.data);
-		this.ytService.stateChanged(event.data);
+
+		if (event.data === 0)
+		{
+			this.playNextVideo();
+		}
+		else
+		{
+			if (this.page ['player'] ['loading'] && event.data > 0)
+			{
+				this.page ['player'] ['loading'] = false;
+				this.page ['player'] ['active'] = true;
+			}
+			this.ytService.stateChanged(event.data);
+		}
 	}
 
 	public playVideo(): void
@@ -210,6 +259,111 @@ export class MainComponent implements OnInit {
 	public pauseVideo(): void
 	{
 		this.player.pauseVideo();
+	}
+
+	public togglePlayer(): void
+	{
+		console.log('player toggled');
+		this.page['player'].active = !this.page['player'].active;
+	}
+
+	public toggleAlbum(): void
+	{
+		console.log('album toggled');
+
+		if (this.page['player'].active)
+		{
+			this.page['player'].active = false;
+		}
+		else
+		{
+			if (this.page ['album'] ['albumIndex'] === -1)
+			{
+				this.closeAlbum();
+			}
+			else
+			{
+				this.ytService.toggleAlbum(this.page ['album'] ['albumIndex']);
+			}
+		}
+	}
+
+	public closeAlbumAndPlayer(): void
+	{
+		console.log('album & player closed');
+		this.closePlayer();
+		this.closeAlbum();
+	}
+
+	private getVideoId(): string
+	{
+		try
+		{
+			// TODO: ?? -> const id = ...; return id;
+			return (this.page ['album'] ['videos'] [this.page ['album'] ['videoIndex']] ['id']);
+		}
+		catch (e)
+		{
+			return ('');
+		}
+	}
+
+	private playNextVideo(): void
+	{
+		this.ytService.stateChanged(-2);
+
+		try {
+			this.page ['album'] ['videoIndex']++;
+
+			if (this.page ['album'] ['videoIndex'] < this.page ['album'] ['videos'].length)
+			{
+				this.ytService.updateSelectedVideo({
+					'albumIndex': this.page ['album'] ['albumIndex'],
+					'videoIndex': this.page ['album'] ['videoIndex'],
+					'videos': this.page ['album'] ['videos']
+				});
+				this.updateVideoId();
+			}
+			else
+			{
+				this.closePlayer();
+			}
+		}
+		catch (e)
+		{
+			this.closePlayer();
+		}
+	}
+
+	private closePlayer(): void
+	{
+		this.page ['player'] ['active'] = false;
+		this.page ['album'] ['videoIndex'] = -1;
+		// this.page ['album'] ['albumIndex'] = -1;
+		this.ytService.stateChanged(0);
+
+		setTimeout(() => {
+			this.page ['player'] ['id'] = '';
+		}, 150);
+	}
+
+	private closeAlbum(): void
+	{
+		this.page ['album'] ['active'] = false;
+		// this.page ['album'] ['videoIndex'] = -1;
+		this.page ['album'] ['albumIndex'] = -1;
+		this.ytService.closeAlbum();
+	}
+
+	private updateVideoId(): void
+	{
+		this.ytService.stateChanged(-4); // loading video
+		this.page ['player'] ['id'] = '';
+
+		setTimeout(() =>
+		{
+			this.page ['player'] ['id'] = this.getVideoId();
+		}, 20);
 	}
 
 }

@@ -9,7 +9,7 @@
 		},
 		{
 			"type":		"content",
-			"title":	"VIDEOARCHÍV",
+			"title":	"ARCHÍV",
 			"id":		"/",
 			"icon":		"play.svg",
 			"show":		true

@@ -68,7 +68,6 @@
 	.content {
 		display: flex;
 		width: 100%;
-		//padding-right: 10px;
 		height: 100%;
 
 		> div {
@@ -137,6 +136,24 @@
 	}
 }
 
+@media all and (min-width: 1920px) {
+	.content_wrapper {
+		.content {
+			> div {
+				> div {
+					h1 {
+						font-size: 64px;
+						padding-bottom: 100px;
+					}
+					p {
+						font-size: 38px;
+					}
+				}
+			}
+		}
+	}
+}
+
 @media all and (max-width: 1024px) {
 	.content_wrapper {
 		.content {
@@ -146,6 +163,7 @@
 
 					h1 {
 						padding-bottom: 20px;
+						font-size: 32px;
 					}
 					p {
 						font-size: 20px;
@@ -162,6 +180,7 @@
 			> div {
 				> div {
 					h1 {
+						font-size: 24px;
 						padding-bottom: 10px;
 					}
 					p {
