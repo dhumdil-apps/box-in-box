@@ -25,7 +25,6 @@ export class DropdownComponent {
 		this.dropdown.toggle();
 	}
 
-	// todo: close on scroll
 	public close(): void
 	{
 		this.dropdown.hide();

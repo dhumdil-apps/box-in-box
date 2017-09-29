@@ -25,7 +25,6 @@
 		<!-- Youtube Player, TODO: component for player -->
 		<div class="bnb-player {{ page['player'] ['active'] ? 'player_active' : '' }}">
 
-			<!-- TODO: err? -> [videoId] = "page['player'].id" -->
 			<youtube-player *ngIf 	  = "page ['player'] ['id'].length > 0"
 							width	  = "100%"
 							height 	  = "100%"

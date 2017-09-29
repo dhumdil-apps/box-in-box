@@ -299,7 +299,6 @@ export class MainComponent implements OnInit {
 	{
 		try
 		{
-			// TODO: ?? -> const id = ...; return id;
 			return (this.page ['album'] ['videos'] [this.page ['album'] ['videoIndex']] ['id']);
 		}
 		catch (e)
