@@ -9,40 +9,38 @@
 			"img": "assets/admin/img/YT/feathers.jpg",
 			"videos": [
 				{
-					"title": "TEST 1",
-					"id": "ru5DJRh5tQE"
+					"title": "Uvod",
+					"img": "assets/admin/img/YT/feathers.jpg",
+					"id": "LxX_OVNOo0w",
+					"start": 0
 				},
 				{
-					"title": "TEST 2",
-					"id": "LAdAjOsnpdM"
+					"title": "Obsah",
+					"img": "assets/admin/img/YT/feathers.jpg",
+					"id": "LxX_OVNOo0w",
+					"start": 5
 				},
 				{
-					"title": "Passenger | Let Her Go (Official Video)",
-					"id": "RBumgq5yVrA"
-				},
-				{
-					"title": "TEST 1",
-					"id": "ru5DJRh5tQE"
-				},
-				{
-					"title": "TEST 2",
-					"id": "LAdAjOsnpdM"
-				},
-				{
-					"title": "Passenger | Let Her Go (Official Video)",
-					"id": "RBumgq5yVrA"
-				},
-				{
-					"title": "TEST 1",
-					"id": "ru5DJRh5tQE"
-				},
-				{
-					"title": "TEST 2",
-					"id": "LAdAjOsnpdM"
+					"title": "Zaver",
+					"img": "assets/admin/img/YT/feathers.jpg",
+					"id": "RBumgq5yVrA",
+					"start": 10
 				},
 				{
 					"title": "Passenger | Let Her Go (Official Video)",
-					"id": "RBumgq5yVrA"
+					"img": "assets/admin/img/YT/feathers.jpg",
+					"id": "RBumgq5yVrA",
+					"start": 0
+				}
+			]
+		},
+		{
+			"title": "09.11.2015",
+			"img": "assets/admin/img/YT/rails.jpg",
+			"videos": [
+				{
+					"title": "TEST 2",
+					"id": "LAdAjOsnpdM"
 				}
 			]
 		},
@@ -57,55 +55,6 @@
 				{
 					"title": "TEST 1",
 					"id": "ru5DJRh5tQE"
-				},
-				{
-					"title": "TEST 2",
-					"id": "LAdAjOsnpdM"
-				}
-			]
-		},
-		{
-			"title": "09.11.2015",
-			"img": "assets/admin/img/YT/rails.jpg",
-			"videos": [
-				{
-					"title": "TEST 1",
-					"id": "ru5DJRh5tQE"
-				},
-				{
-					"title": "TEST 2",
-					"id": "LAdAjOsnpdM"
-				}
-			]
-		},
-		{
-			"title": "03.23.2016",
-			"verse": [
-				"Už nežijem ja, ale žije vo mne Kristus"
-			],
-			"img": "assets/admin/img/YT/Penguins.jpg",
-			"videos": [
-				{
-					"title": "TEST 1",
-					"id": "ru5DJRh5tQE"
-				},
-				{
-					"title": "TEST 2",
-					"id": "LAdAjOsnpdM"
-				}
-			]
-		},
-		{
-			"title": "09.11.2015",
-			"img": "assets/admin/img/YT/Tulips.jpg",
-			"videos": [
-				{
-					"title": "TEST 1",
-					"id": "ru5DJRh5tQE"
-				},
-				{
-					"title": "TEST 2",
-					"id": "LAdAjOsnpdM"
 				}
 			]
 		}

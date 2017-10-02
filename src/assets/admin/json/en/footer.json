@@ -2,7 +2,7 @@
     "data": {
 		"contact": {
 			"data": {
-				"title": "Stretnutie Rumunskych Veriacich Zijucich Na Slovensku",
+				"title": "Stretnutie Rumunskych veriacich zijucich na Slovensku",
 				"name": {
 					"icon": "name.svg",
 					"name": "Janko Gaidos",
@@ -12,7 +12,7 @@
 				"location": {
 					"icon": "location.svg",
 					"address": "Tehelná 12, 915 01",
-					"city": "Nové Mesto nad Váhom",
+					"city": "Nové Mesto n/V",
 					"country": "Slovensko"
 				},
 				"description": {
@@ -28,9 +28,6 @@
 					]
 				}
 			}
-		},
-		"config": {
-			"data": []
 		}
 	}
 }

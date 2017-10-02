@@ -1,13 +1,13 @@
 <!-- BOX IN BOX, TODO: component for scrolling-->
 <div #bnb (scroll)="onScroll()" class="main {{ popup.isVisible? 'hide-scrollbar' : '' }} {{ page['full-header'] ? 'full' : '' }}" [ngClass]="{'': false}" [perfectScrollbar]="{}">
 
-	<!-- Slider (welcome screen) -->
+	<!-- Slider -->
 	<bnb-slider *ngIf 	= "!page ['loading']"
 				[path] 	= "page ['langs'] [ page['langIndex'] ]"
 				(popup) = "openPopup($event)"
 	></bnb-slider>
 
-	<!-- Header (navigation) -->
+	<!-- Header -->
 	<bnb-header *ngIf 		   = "!page['loading']"
 				[page] 		   = "page"
 				(navigate) 	   = "navigateTo($event)"
@@ -21,6 +21,16 @@
 
 		<!-- Routed Page -->
 		<router-outlet></router-outlet>
+
+		<!-- YT player -->
+		<bnb-player [player] = "player"
+					(state)  = "onStateChange($event)"
+		></bnb-player>
+
+		<!-- Popup -->
+		<bnb-popup 	*ngIf	= "popup.isVisible"
+					  [popup]	= "popup"
+		></bnb-popup>
 
 		<!-- Youtube Player, TODO: component for player -->
 		<div class="bnb-player {{ page['player'] ['active'] ? 'player_active' : '' }}">
@@ -37,16 +47,11 @@
 
 	</div>
 
-	<!-- Footer (contact) -->
+	<!-- Footer -->
 	<bnb-footer	*ngIf	= "page['header-loaded']"
 			    [page]	= "page"
 			    (popup)	= "openPopup($event)"
 	></bnb-footer>
-
-	<!-- Popup (read more) -->
-	<bnb-popup 	*ngIf	= "popup.isVisible"
-				[popup]	= "popup"
-	></bnb-popup>
 
 </div>
 

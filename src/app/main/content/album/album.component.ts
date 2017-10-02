@@ -5,8 +5,8 @@ import { YTService } 													from '../../../services/communicate/yt.service
 
 @Component({
 	selector: 'bnb-yt',
-	templateUrl: './yt.html',
-	styleUrls: ['./yt.less']
+	templateUrl: './album.html',
+	styleUrls: ['./album.less']
 })
 
 export class YTComponent implements AfterViewInit, OnDestroy {

@@ -242,11 +242,12 @@ export class MainComponent implements OnInit {
 		}
 		else
 		{
-			if (this.page ['player'] ['loading'] && event.data > 0)
+			if (this.page ['player'] ['loading'] && event.data === 1)
 			{
 				this.page ['player'] ['loading'] = false;
 				this.page ['player'] ['active'] = true;
 			}
+
 			this.ytService.stateChanged(event.data);
 		}
 	}
@@ -299,10 +300,12 @@ export class MainComponent implements OnInit {
 	{
 		try
 		{
+			console.log(this.page ['album'] ['videos'] [this.page ['album'] ['videoIndex']] ['id']);
 			return (this.page ['album'] ['videos'] [this.page ['album'] ['videoIndex']] ['id']);
 		}
 		catch (e)
 		{
+			console.log(e.message);
 			return ('');
 		}
 	}
@@ -330,6 +333,7 @@ export class MainComponent implements OnInit {
 		}
 		catch (e)
 		{
+			console.log(e.message);
 			this.closePlayer();
 		}
 	}
@@ -338,7 +342,6 @@ export class MainComponent implements OnInit {
 	{
 		this.page ['player'] ['active'] = false;
 		this.page ['album'] ['videoIndex'] = -1;
-		// this.page ['album'] ['albumIndex'] = -1;
 		this.ytService.stateChanged(0);
 
 		setTimeout(() => {
@@ -349,20 +352,19 @@ export class MainComponent implements OnInit {
 	private closeAlbum(): void
 	{
 		this.page ['album'] ['active'] = false;
-		// this.page ['album'] ['videoIndex'] = -1;
 		this.page ['album'] ['albumIndex'] = -1;
 		this.ytService.closeAlbum();
 	}
 
 	private updateVideoId(): void
 	{
-		this.ytService.stateChanged(-4); // loading video
+		this.ytService.stateChanged(-2);
 		this.page ['player'] ['id'] = '';
 
 		setTimeout(() =>
 		{
 			this.page ['player'] ['id'] = this.getVideoId();
-		}, 20);
+		}, 50);
 	}
 
 }
