@@ -1,144 +1,168 @@
-import { Component, ViewChild, HostListener, OnInit } 	from '@angular/core';
-import { Router }										from '@angular/router';
-import { HttpGETService }								from '../services/http/get.service';
-import { PerfectScrollbarDirective }	 				from 'ngx-perfect-scrollbar';
-import { HeaderComponent } 								from './header/header.component';
-import { Popup } 										from '../modules/popup/popup.model';
-import { YTService } 									from '../services/communicate/yt.service';
+import { Component, ViewChild, HostListener, OnInit } 	from "@angular/core";
+import { Router }										from "@angular/router";
+import { PerfectScrollbarDirective }	 				from "ngx-perfect-scrollbar";
+import { HttpService } 									from "./services/http.service";
+import { Popup } 										from "./page/modules/popup/popup.model";
+import { Slider }										from "./page/content/slider/slider.model";
+import { Navigation }									from "./page/content/header/header.model";
+import { Footer }										from "./page/content/footer/footer.model";
+import { SliderComponent } 								from "./page/content/slider/slider.component";
+import { HeaderComponent } 								from "./page/content/header/header.component";
 
 @Component({
 	selector: 'bnb-main',
 	templateUrl: './main.html',
-	styleUrls: ['./main.less'],
-	providers: [ YTService ]
+	styleUrls: ['./main.less']
 })
 
 export class MainComponent implements OnInit {
 
-	public page: any;
+	public loading = true;
+	public app: any;
 	public popup: Popup;
-	public player: any;
+	public slider: Slider = new Slider();
+	public navigation: Navigation = new Navigation();
+	public footer: Footer = new Footer();
+	public videoAlbums: any = [];
 
 	@ViewChild('bnb') bnb;
-
+	@ViewChild(PerfectScrollbarDirective) directiveScroll: PerfectScrollbarDirective;
+	@ViewChild(SliderComponent) sliderComponent: SliderComponent;
 	@ViewChild(HeaderComponent) headerComponent: HeaderComponent;
 
-	@ViewChild(PerfectScrollbarDirective) directiveScroll: PerfectScrollbarDirective;
-
-	@HostListener('window:resize') onResize()
+	@HostListener('window:resize') handleResize()
 	{
-		this.handleResize();
+		this.onResize();
 	}
 
-	constructor(private router: Router, private getService: HttpGETService, private ytService: YTService)
+	constructor(private router: Router, private http: HttpService)
 	{
-		this.init();
-
-		ytService.onSelectVideo$.subscribe((album) =>
-		{
-			console.log('album:', album);
-
-			this.scrollTo('content');
-
-			this.page ['player'] ['loading'] = true;
-
-			this.page ['album'] ['active'] = true;
-			this.page ['album'] ['videos'] = album.videos;
-			this.page ['album'] ['albumIndex'] = album.albumIndex;
-			this.page ['album'] ['videoIndex'] = album.videoIndex;
-
-			this.updateVideoId();
-		});
-
-		ytService.onOpenAlbum$.subscribe(() =>
-		{
-			this.scrollTo('content');
-			this.page ['album'] ['active'] = false;
-			setTimeout(() => {
-				this.page ['album'] ['active'] = true;
-			}, 20);
-		});
-
-		ytService.onPause$.subscribe(() =>
-		{
-			this.pauseVideo();
-		});
-
-		ytService.onPlay$.subscribe(() =>
-		{
-			this.playVideo();
-		});
-
-	}
-
-	ngOnInit()
-	{
-		this.handleResize();
-	}
-
-	private init()
-	{
-		this.page = {
-			'path': 'assets/app/img/', // path to icons
-			'browser-height': 0, // user's web browser
-			'browser-width': 0, // user's web browser
-			'fixed-header': false, // header
-			'scroll-sections': ['header', 'content', 'footer'], // list sections for scrolling
-			'langs':  ['en'],
-			'langIndex': 0,
-			'loading': true,
-			'header-loaded': false,
-			'header-len': 0,
-			'full-header': false,
-			'popup-is-active': false,
-			'player': {}, // youtube player visibility
-			'album': {}, // album visibility
+		this.app = {
+			'active-route': '',
+			'langs': {
+				'selected': '',
+				'list': []
+			},
+			'path': {
+				'admin': 'assets/admin/json/',
+				'app': 'assets/app/img/'
+			},
+			'browser': {
+				'w': 0,
+				'h': 0
+			},
+			'header': {
+				'isFixed': false,
+				'isFull': false,
+				'isLoaded': false,
+				'length': 0
+			},
+			'scroll-sections': {
+				'active': 0,
+				'list': ['header', 'content', 'footer']
+			},
+			'player': {} // TODO
 		};
+
+		this.http.get(this.app['path'].admin + 'langs.json').subscribe(data =>
+		{
+			this.app['langs'].list = data.langs;
+		});
 
 		this.popup = new Popup();
-
-		this.page['player'] = {
-			'active': false,
-			'id': '',
-			'loading': false
-		};
-
-		this.page['album'] = {
-			'active': false,
-			'albumIndex': -1,
-			'videoIndex': -1,
-			'videos': []
-		};
-
-		this.getService.get('app.json').subscribe(data => {
-
-			try
-			{
-				this.page['langs'] = data['langs'];
-				this.page['langIndex'] = data['langIndex'];
-			}
-			catch (e)
-			{
-				this.page['langs'] = ['en'];
-				this.page['langIndex'] = 0;
-			}
-
-			this.ytService.updatePath({
-				'app': this.page ['path'],
-				'admin': this.page ['langs'] [ this.page['langIndex'] ]
-			});
-
-			this.page['loading'] = false;
-
-		});
-
 	}
 
-	public onScroll()
+	ngOnInit(): void
 	{
-		this.page['fixed-header'] = (this.getScrollTop() >= (this.page['browser-height'] - 51));
+		this.onResize();
+	}
 
-		if (this.page['header-loaded'] && this.page['full-header'])
+	private validateRoute(): void
+	{
+		// console.log(this.router.routerState.snapshot.url);
+		if (this.router.routerState.snapshot.url === '/video-album')
+		{
+			this.app['active-route'] = 'video-album';
+		}
+		else if (this.router.routerState.snapshot.url === '/photo-album')
+		{
+			this.app['active-route'] = 'photo-album';
+		}
+		else
+		{
+			this.app['active-route'] = '404';
+		}
+	}
+
+	public selectLang(lang: string): void
+	{
+		this.app['langs'].selected = lang;
+
+		// slider
+		this.http.get(this.app['path'].admin + lang + '/slider.json').subscribe(sliderData =>
+		{
+			this.slider = new Slider(sliderData);
+			this.slider.loading = false;
+
+			// header
+			this.http.get(this.app['path'].admin + lang + '/header.json').subscribe(headerData =>
+			{
+				this.navigation = new Navigation(headerData);
+				this.app['header'].isLoaded = true;
+				this.app['header'].length = this.navigation.links.length;
+				console.log(this.app);
+				this.app['header'].isFull =  (this.app['browser'].w <= ((this.navigation.links.length * 250) + 200));
+				this.navigation.loading = false;
+
+				// footer
+				this.http.get(this.app['path'].admin + lang + '/footer.json').subscribe(footerData =>
+				{
+					this.footer = new Footer(footerData);
+					this.footer.loading = false;
+					this.sliderComponent.setAutoSlideOn();
+
+					this.http.get(this.app['path'].admin + lang + '/video-album.json').subscribe(data =>
+					{
+						this.videoAlbums = data;
+						this.validateRoute();
+						this.loading = false;
+					});
+				});
+			});
+		});
+	}
+
+	private onResize(): void
+	{
+		this.app['browser'].w = this.bnb.nativeElement.offsetParent.clientWidth;
+
+		if (!this.loading)
+		{
+			this.app['header'].isFull = (this.app['browser'].w <= ((this.app['header'].length * 250) + 200));
+
+			if (this.app['header'].isFull)
+			{
+				this.headerComponent.resetAnimation();
+				this.headerComponent.closeMenu();
+			}
+		}
+		this.app['browser'].h = this.bnb.nativeElement.offsetParent.clientHeight - 50;
+
+		this.app['album'].size = min(this.app['browser'].h - 50, this.app['browser'].w / 2);
+
+		function min(x, y) {
+			if (x < y) {
+				return (x);
+			}
+			return (y);
+		}
+	}
+
+	public onScroll(): void
+	{
+		this.app['header'].isFixed = (this.bnb.nativeElement.scrollTop > (this.app['browser'].h));
+
+		if (!this.loading && this.app['header'].isFull)
 		{
 			this.headerComponent.closeMenu();
 		}
@@ -151,6 +175,7 @@ export class MainComponent implements OnInit {
 			case 'content':
 			{
 				this.scrollTo('content');
+				this.app['active-route'] = navigation.id;
 				this.router.navigate([navigation.id]);
 				return;
 			}
@@ -159,47 +184,31 @@ export class MainComponent implements OnInit {
 				this.scrollTo(navigation.id);
 				return;
 			}
+			case 'redirect':
+			{
+				window.open(navigation.id);
+				return;
+			}
 			default: return;
 		}
-
 	}
 
 	private scrollTo(section: string): void
 	{
-		if (section === this.page['scroll-sections'][1])
+		if (section === this.app['scroll-sections'] ['list'] [1])
 		{
-			this.directiveScroll.scrollToY(this.page['browser-height'] - 50, 500);
+			this.app['scroll-sections'] ['active'] = 1;
+			this.directiveScroll.scrollToY(this.app['browser'].h, 500);
 		}
-		else if (section === this.page['scroll-sections'][2])
+		else if (section === this.app['scroll-sections'] ['list'] [2])
 		{
-			this.directiveScroll.scrollToY(this.getScrollHeight() - this.getOffsetHeight(), 500);
+			this.app['scroll-sections'] ['active'] = 2;
+			this.directiveScroll.scrollToY((this.app['browser'].h * 2), 500);
 		}
 		else
 		{
-			this.directiveScroll.scrollToY(0 - this.getScrollHeight(), 800);
-		}
-	}
-
-	public handleResize()
-	{
-		if (this.bnb.nativeElement.offsetParent.clientWidth !== this.page['browser-width'])
-		{
-			this.page['browser-width'] = this.bnb.nativeElement.offsetParent.clientWidth;
-
-			if (this.page['header-loaded'])
-			{
-				this.page['full-header'] =  (this.page['browser-width'] <= ((this.page['header-len'] * 250) + 200));
-
-				if (this.page['full-header'])
-				{
-					this.headerComponent.resetAnimation();
-					this.headerComponent.closeMenu();
-				}
-			}
-		}
-		if (this.bnb.nativeElement.offsetParent.clientHeight !== this.page['browser-height'])
-		{
-			this.page['browser-height'] = this.bnb.nativeElement.offsetParent.clientHeight;
+			this.app['scroll-sections'] ['active'] = 0;
+			this.directiveScroll.scrollToY(0, 500);
 		}
 	}
 
@@ -210,161 +219,24 @@ export class MainComponent implements OnInit {
 		this.popup.isVisible = true;
 	}
 
-	private getScrollTop(): number
+	public playYT(): void
 	{
-		return this.bnb.nativeElement.scrollTop;
+		console.log('playYT');
 	}
 
-	private getOffsetHeight(): number
+	public stopYT(): void
 	{
-		return this.bnb.nativeElement.offsetHeight;
+		console.log('stopYT');
 	}
 
-	private getScrollHeight(): number
+	public pauseYT(): void
 	{
-		return this.bnb.nativeElement.scrollHeight;
+		console.log('pauseYT');
 	}
 
-	public savePlayer(player): void
+	public toggleYT(): void
 	{
-		console.log('player', player);
-		this.player = player;
-		this.playVideo();
-	}
-
-	public onStateChange(event): void
-	{
-		console.log('player state', event.data);
-
-		if (event.data === 0)
-		{
-			this.playNextVideo();
-		}
-		else
-		{
-			if (this.page ['player'] ['loading'] && event.data === 1)
-			{
-				this.page ['player'] ['loading'] = false;
-				this.page ['player'] ['active'] = true;
-			}
-
-			this.ytService.stateChanged(event.data);
-		}
-	}
-
-	public playVideo(): void
-	{
-		this.player.playVideo();
-	}
-
-	public pauseVideo(): void
-	{
-		this.player.pauseVideo();
-	}
-
-	public togglePlayer(): void
-	{
-		console.log('player toggled');
-		this.page['player'].active = !this.page['player'].active;
-	}
-
-	public toggleAlbum(): void
-	{
-		console.log('album toggled');
-
-		if (this.page['player'].active)
-		{
-			this.page['player'].active = false;
-		}
-		else
-		{
-			if (this.page ['album'] ['albumIndex'] === -1)
-			{
-				this.closeAlbum();
-			}
-			else
-			{
-				this.ytService.toggleAlbum(this.page ['album'] ['albumIndex']);
-			}
-		}
-	}
-
-	public closeAlbumAndPlayer(): void
-	{
-		console.log('album & player closed');
-		this.closePlayer();
-		this.closeAlbum();
-	}
-
-	private getVideoId(): string
-	{
-		try
-		{
-			console.log(this.page ['album'] ['videos'] [this.page ['album'] ['videoIndex']] ['id']);
-			return (this.page ['album'] ['videos'] [this.page ['album'] ['videoIndex']] ['id']);
-		}
-		catch (e)
-		{
-			console.log(e.message);
-			return ('');
-		}
-	}
-
-	private playNextVideo(): void
-	{
-		this.ytService.stateChanged(-2);
-
-		try {
-			this.page ['album'] ['videoIndex']++;
-
-			if (this.page ['album'] ['videoIndex'] < this.page ['album'] ['videos'].length)
-			{
-				this.ytService.updateSelectedVideo({
-					'albumIndex': this.page ['album'] ['albumIndex'],
-					'videoIndex': this.page ['album'] ['videoIndex'],
-					'videos': this.page ['album'] ['videos']
-				});
-				this.updateVideoId();
-			}
-			else
-			{
-				this.closePlayer();
-			}
-		}
-		catch (e)
-		{
-			console.log(e.message);
-			this.closePlayer();
-		}
-	}
-
-	private closePlayer(): void
-	{
-		this.page ['player'] ['active'] = false;
-		this.page ['album'] ['videoIndex'] = -1;
-		this.ytService.stateChanged(0);
-
-		setTimeout(() => {
-			this.page ['player'] ['id'] = '';
-		}, 150);
-	}
-
-	private closeAlbum(): void
-	{
-		this.page ['album'] ['active'] = false;
-		this.page ['album'] ['albumIndex'] = -1;
-		this.ytService.closeAlbum();
-	}
-
-	private updateVideoId(): void
-	{
-		this.ytService.stateChanged(-2);
-		this.page ['player'] ['id'] = '';
-
-		setTimeout(() =>
-		{
-			this.page ['player'] ['id'] = this.getVideoId();
-		}, 50);
+		console.log('toggleYT');
 	}
 
 }

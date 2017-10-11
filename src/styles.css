@@ -20,7 +20,7 @@ bnb-slider {
 	min-height: calc(100% - 50px);
 }
 
-/* on full view change the look of header */
+/* on full view -> align left */
 .full .links .first-flex {
 	display: none !important;
 }

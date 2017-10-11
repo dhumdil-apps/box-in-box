@@ -1,0 +1,82 @@
+{
+	"data": [
+		{
+			"title": "Passenger | Let Her Go (Official Video)",
+			"verse": [
+				"Ja som cesta, pravda i život.",
+				"Nik neprichádza k Otcovi, ak len nie skrze mňa."
+			],
+			"img": "assets/admin/img/YT/feathers.jpg",
+			"video-id": "RBumgq5yVrA",
+			"sections": [
+				{
+					"title": "Intro",
+					"img": "assets/admin/img/YT/rails.jpg",
+					"start": 0
+				},
+				{
+					"title": "Badum-tsss",
+					"img": "assets/admin/img/YT/Koala.jpg",
+					"start": 5
+				},
+				{
+					"title": "The End",
+					"img": "assets/admin/img/YT/feathers.jpg",
+					"start": 10
+				}
+			]
+		},
+		{
+			"title": "Passenger | Let Her Go (Official Video)",
+			"verse": [
+				"Ja som cesta, pravda i život.",
+				"Nik neprichádza k Otcovi, ak len nie skrze mňa."
+			],
+			"img": "assets/admin/img/YT/feathers.jpg",
+			"video-id": "RBumgq5yVrA",
+			"sections": [
+				{
+					"title": "Intro",
+					"img": "assets/admin/img/YT/rails.jpg",
+					"start": 0
+				},
+				{
+					"title": "Badum-tsss",
+					"img": "assets/admin/img/YT/Koala.jpg",
+					"start": 5
+				},
+				{
+					"title": "The End",
+					"img": "assets/admin/img/YT/feathers.jpg",
+					"start": 10
+				}
+			]
+		},
+		{
+			"title": "Passenger | Let Her Go (Official Video)",
+			"verse": [
+				"Ja som cesta, pravda i život.",
+				"Nik neprichádza k Otcovi, ak len nie skrze mňa."
+			],
+			"img": "assets/admin/img/YT/feathers.jpg",
+			"video-id": "RBumgq5yVrA",
+			"sections": [
+				{
+					"title": "Intro",
+					"img": "assets/admin/img/YT/rails.jpg",
+					"start": 0
+				},
+				{
+					"title": "Badum-tsss",
+					"img": "assets/admin/img/YT/Koala.jpg",
+					"start": 5
+				},
+				{
+					"title": "The End",
+					"img": "assets/admin/img/YT/feathers.jpg",
+					"start": 10
+				}
+			]
+		}
+	]
+}

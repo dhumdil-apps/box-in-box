@@ -1,0 +1,20 @@
+<div class="slider">
+
+	<!-- Slides -->
+	<div class="slides {{ animateIfActive(i) }}" *ngFor="let slide of slider.slides; let i = index;">
+		<img src="{{ slide['img'].src }}" />
+		<div class="content">
+			<h1 (click)="openPopup(slide['txt'].title, slide['txt'].lines)">{{ slide['txt'].title }}</h1>
+		</div>
+	</div>
+
+	<!-- Navigation -->
+	<div class="btns" *ngIf="slider.slides.length > 1">
+		<div>
+			<div *ngFor="let slide of slider.slides; let i = index;" (click)="selectSlide(i)">
+				<div [ngClass]="{'active': i === slider.activeSlide}"></div>
+			</div>
+		</div>
+	</div>
+
+</div>

@@ -1,14 +1,23 @@
 import { NgModule } 			from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { NotFoundComponent } 	from './main/content/not-found/not-found.component';
-import { YTComponent } 			from './main/content/yt/yt.component';
+import { EmptyComponent }		from './main/page/router/empty/empty.component';
+import { NotFoundComponent } 	from './main/page/router/not-found/not-found.component';
 
 const routes: Routes = [
 	{
 		path: '',
-		pathMatch: 'full',
-		component: YTComponent
+		// component: EmptyComponent,
+		redirectTo: '/video-album',
+		pathMatch: 'full'
+	},
+	{
+		path: 'video-album',
+		component: EmptyComponent
+	},
+	{
+		path: 'photo-album',
+		component: EmptyComponent
 	},
 	{
 		path: '**',
@@ -24,6 +33,6 @@ const routes: Routes = [
 export class AppRoutingModule {}
 
 export const routedComponents = [
-	YTComponent,
+	EmptyComponent,
 	NotFoundComponent
 ];

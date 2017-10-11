@@ -1,0 +1,17 @@
+<div class="link-container">
+
+	<div class="link">
+
+		<div class="flex first-flex"></div>
+
+		<img class="{{ isset(link.icon) ? '' : 'hidden' }}" src="{{ src(link.icon) }}" />
+
+		<span *ngIf="isset(link.title)">{{ link.title }}</span>
+
+		<div class="flex"></div>
+
+	</div>
+
+	<div class="underline"></div>
+
+</div>

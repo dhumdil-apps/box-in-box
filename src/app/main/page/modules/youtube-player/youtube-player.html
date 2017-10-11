@@ -1,0 +1,11 @@
+<div class="youtube-player {{ page['player'] ['active'] ? 'player_active' : '' }}">
+
+	<youtube-player *ngIf 	  = "page['player'] ['id'].length > 0"
+					width	  = "100%"
+					height 	  = "100%"
+					[videoId] = "page['player'] ['id']"
+					(ready)	  = "savePlayer($event)"
+					(change)  = "onStateChange($event)"
+	></youtube-player>
+
+</div>

@@ -1,0 +1,186 @@
+.slider {
+	position: absolute;
+	top: 0;
+	left: 0;
+    width: 100%;
+	min-height: 100%;
+	background: #eeeeee;
+	overflow: hidden;
+
+	&:hover {
+		.btns {
+			opacity: 1;
+		}
+	}
+	.animate img {
+		z-index: 150;
+		visibility: visible;
+		animation: slide-down 300ms ease-in;
+		animation-fill-mode: both;
+	}
+	.hide img {
+		z-index: 50;
+		animation: wait-for-slide-down 300ms linear;
+	}
+	.animate .content {
+		z-index: 250;
+		visibility: visible;
+		animation: slide-right 300ms ease-in;
+		animation-delay: 300ms;
+		animation-fill-mode: both;
+	}
+	.hide .content {
+		z-index: 50;
+	}
+	.animated img {
+		z-index: 150;
+		visibility: visible;
+	}
+	.hided img {
+		z-index: 50;
+		visibility: hidden;
+	}
+	.animated .content {
+		z-index: 250;
+		visibility: visible;
+	}
+	.hided .content {
+		z-index: 50;
+	}
+}
+
+.slides {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	min-height: 100%;
+
+	img {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 100%;
+		height: 100%;
+		transform: translate3d(-50%, -50%, 0);
+		visibility: hidden;
+	}
+	.content {
+		display: flex;
+		position: absolute;
+		top: 50px;
+		left: 0;
+		width: 100%;
+		height: ~"calc(100% - 50px)";
+
+		h1 {
+			width: 100%;
+			margin: auto 0;
+			color: #eee;
+			text-align: center;
+			background: rgba(0,0,0, 0.5);
+			cursor: pointer;
+		}
+	}
+}
+
+.btns {
+	position: absolute;
+	display: flex;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 50px;
+	z-index: 150;
+	opacity: 0.5;
+	transition: all 200ms ease-in;
+
+	&:hover {
+		opacity: 1;
+
+		> div {
+			> div {
+				> div {
+					border: 2px solid #000;
+				}
+			}
+		}
+	}
+	> div {
+		display: flex;
+		margin: auto;
+
+		&:hover {
+			> div {
+				> div {
+					-webkit-box-shadow: 0 0 20px 1px rgba(255,255,255, 0.75);
+					-moz-box-shadow: 0 0 20px 1px rgba(255,255,255, 0.75);
+					box-shadow: 0 0 20px 1px rgba(255,255,255, 0.75);
+				}
+			}
+		}
+		> div {
+			padding: 5px;
+			margin: 0 5px;
+			cursor: pointer;
+			border-radius: 25px;
+
+			&:hover {
+				> div {
+					background: #000;
+				}
+			}
+			> div {
+				position: relative;
+				width: 10px;
+				height: 10px;
+				background: transparent;
+				border-radius: 50%;
+				border: 2px solid #000;
+			}
+			.active {
+				background: #000;
+			}
+		}
+	}
+}
+
+@keyframes slide-down {
+	from {
+		transform: translate3d(-50%, -150%, 0);
+	}
+	to {
+	}
+}
+
+@keyframes slide-right {
+	from {
+		opacity: 0;
+		transform: translate3d(-100%, 0, 0);
+	}
+	to {
+		transform: none;
+		opacity: 1;
+	}
+}
+
+@keyframes wait-for-slide-down {
+	from {
+		visibility: visible;
+	}
+	to {
+		visibility: hidden;
+	}
+}
+
+@media all and (max-width: 1024px) {
+	h1 {
+		font-size: 28px;
+	}
+}
+
+@media all and (max-width: 768px) {
+	h1 {
+		font-size: 20px;
+	}
+}

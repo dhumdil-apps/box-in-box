@@ -1,0 +1,32 @@
+{
+    "data": [
+		{
+			"type":		"scroll",
+			"title":	"News",
+			"id":		"header",
+			"icon":		"logo.png",
+			"show":		true
+		},
+		{
+			"type":		"content",
+			"title":	"Video",
+			"id":		"/video-album",
+			"icon":		"play.svg",
+			"show":		true
+		},
+		{
+			"type":		"content",
+			"title":	"Photo",
+			"id":		"/photo-album",
+			"icon":		"album.svg",
+			"show":		true
+		},
+		{
+			"type":		"scroll",
+			"title":	"Contact",
+			"id":		"footer",
+			"icon":		"name-black.svg",
+			"show":		true
+		}
+	]
+}

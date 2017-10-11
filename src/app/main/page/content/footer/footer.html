@@ -1,0 +1,67 @@
+<!-- Footer -->
+<div class="footer">
+
+	<!-- Content -->
+	<div class="contact">
+
+		<!-- title -->
+		<div>
+			<h1 class="title layout-center">{{ footer.contact.data.title }}</h1>
+		</div>
+
+		<div class="txt flex">
+			<div>
+
+				<!-- Name & Address -->
+				<div class="contact-info">
+					<div class="flex">
+						<div class="layout-row">
+							<div class="items">
+
+								<!-- names -->
+								<div class="layout-row" *ngFor="let item of footer.contact.data.names">
+									<div class="icon">
+										<img src="{{ src('name.svg') }}" />
+									</div>
+									<div class="item">
+										<h3>{{ item.name }}</h3>
+										<h3>{{ item.phone }}</h3>
+										<h3>{{ item.mail }}</h3>
+									</div>
+									<div class="flex"></div>
+								</div>
+
+								<!-- locations -->
+								<div class="layout-row" *ngFor="let item of footer.contact.data.locations">
+									<div class="icon">
+										<img src="{{ src('location.svg') }}" />
+									</div>
+									<div class="item">
+										<h3>{{ item.address }}</h3>
+										<h3>{{ item.city }}</h3>
+										<h3>{{ item.country }}</h3>
+									</div>
+									<div class="flex"></div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Description -->
+				<div class="desc">
+					<div class="layout-row flex">
+						<h2>{{ footer.contact.data.description.title }}</h2>
+					</div>
+					<div class="layout-row">
+						<h3 (click)="openPopup(footer.contact.data.description.title, footer.contact.data.description.lines)">{{ footer.contact.data.description['read-more'] }}</h3>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+
+</div>
