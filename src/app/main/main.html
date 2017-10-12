@@ -1,11 +1,10 @@
+<!-- TODO: component for lang -->
 <div class="lang {{ loading ? 'fade-in-lang' : 'fade-out-lang' }}">
-	<div *ngFor="let lang of app['langs'].list" (click)="selectLang(lang)">
-		<div>{{ lang }}</div>
-	</div>
+	<img class = "{{ (app['langs'].selected !== '' && lang !== app['langs'].selected) ? 'hide' : '' }}" *ngFor = "let lang of app['langs'].list" (click) = "selectLang(lang)" src = "{{ app['path'].app + lang + '.svg' }}" width="50%" height="auto" />
 </div>
 
-<!-- TODO: component for scrolling-->
-<div #bnb (scroll)="onScroll()" class="{{ !loading ? 'main' : '' }} {{ popup.isVisible? 'hide-scrollbar' : '' }} {{ app['header'].isFull ? 'full': '' }}" [ngClass]="{'': false}" [perfectScrollbar]="{}">
+<!-- TODO: fix the scrolling -->
+<div #bnb (scroll)="onScroll()" class="main {{ popup.isVisible? 'hide-scrollbar' : '' }} {{ app['header'].isFull ? 'full': '' }}" [ngClass]="{'': false}" [perfectScrollbar]="{}">
 
 	<!-- Slider -->
 	<bnb-slider *ngIf 	 = "!slider.loading"
@@ -18,33 +17,36 @@
 				[app] 	     = "app"
 				[navigation] = "navigation"
 				(playYT)     = "playYT()"
-				(stopYT)     = "stopYT()"
+				(closeYT)    = "closeYT()"
 				(pauseYT)    = "pauseYT()"
 				(toggleYT)   = "toggleYT()"
 				(navigate)   = "navigateTo($event)"
 	></bnb-header>
 
 	<!-- Content -->
-	<div *ngIf="!loading" class="content" [style.width.px]="app['browser'].w" [style.height.px]="app['browser'].h">
+	<div *ngIf = "!loading" class = "content" [style.width.px] = "app['browser'].w" [style.height.px] = "app['browser'].h">
 
-		<!-- Routed Page -->
+		<!-- Router -->
 		<router-outlet></router-outlet>
 
 		<!-- Improvise Adapt Overcome -->
 		<div>
 
-			<bnb-video-album *ngIf 		   = "'video-album' === app['active-route']"
-							 [app] 		   = "app"
-							 [videoAlbum]  = "videoAlbum"
-							 (selectVideo) = "selectVideo($event)"
+			<bnb-video-album class 		  = "{{ isActiveRoute('video-album') ? 'slide-in-left' : 'slide-out-left' }}"
+							 [app] 		  = "app"
+							 [videoAlbum] = "videoAlbum"
+							 (play)		  = "playYT()"
+							 (pause) 	  = "pauseYT()"
+							 (scroll) 	  = "scrollTo('content')"
+							 (selectID)   = "onSelectID($event)"
 			></bnb-video-album>
 
-			<bnb-photo-album *ngIf = "'photo-album' === app['active-route']"></bnb-photo-album>
+			<bnb-photo-album class = "{{ isActiveRoute('photo-album') ? 'slide-in-right' : 'slide-out-right' }}"></bnb-photo-album>
 
 		</div>
 
-		<!-- Player -->
-		<!--<bnb-youtube-player></bnb-youtube-player>-->
+		<!-- YT Player -->
+		<bnb-youtube-player [app] = "app"></bnb-youtube-player>
 
 		<!-- Popup -->
 		<bnb-popup 	*ngIf	= "popup.isVisible"
@@ -54,10 +56,10 @@
 	</div>
 
 	<!-- Footer -->
-	<bnb-footer	*ngIf	 = "!footer.loading"
-			    [app]	 = "app"
-				[footer] = "footer"
-			    (popup)	 = "openPopup($event)"
+	<bnb-footer	*ngIf	 	 = "!footer.loading"
+			    [app]	 	 = "app"
+				[footer] 	 = "footer"
+			    (popup)	 	 = "openPopup($event)"
 	></bnb-footer>
 
 </div>

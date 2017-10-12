@@ -1,4 +1,4 @@
-<div class="navigation {{ app['player'].isActive ? 'align_left' : '' }}" [ngClass]="{'fixed': app['header'].isFixed}">
+<div class="navigation {{ (app['player'].state > 0) ? 'align_left' : '' }} {{ app['header'].isFixed ? 'fixed': '' }}">
 
     <div class="navigation_container {{ app['header'].isFull ? 'full' : '' }}">
 
@@ -40,30 +40,31 @@
 
 		</div>
 
-		<div class="control" *ngIf="app['player'].isActive">
+		<div class="control" *ngIf="app['player'].state > 0 || app['player'].state === -1">
 
-			<img src 	 = "{{ app['path'].app + 'img/youtube.png' }}"
+			<img *ngIf   = "app['player'].state !== -1"
+				 src 	 = "{{ src('yt.svg') }}"
 				 class 	 = "player"
 				 title	 = "PLAYER"
 				 (click) = "toggleYTEvent()"
 			/>
 
-			<img *ngIf 	 = "app['player'].state === 2"
-				 src 	 = "{{ app['path'].app + 'img/youtube.png' }}"
-				 class 	 = "sm"
+			<img *ngIf 	 = "app['player'].state !== 1 && app['player'].state !== -1"
+				 src 	 = "{{ src('play_outline.svg') }}"
+				 class 	 = "play-pause"
 				 title	 = "PLAY"
 				 (click) = "playYTEvent()"
 			/>
 
 			<img *ngIf 	 = "app['player'].state === 1"
-				 src 	 = "{{ app['path'].app + 'img/youtube.png' }}"
-				 class 	 = "sm"
+				 src 	 = "{{ src('pause_outline.svg') }}"
+				 class 	 = "play-pause"
 				 title	 = "PAUSE"
 				 (click) = "pauseYTEvent()"
 			/>
 
-			<img src 	 = "{{ app['path'].app + 'img/youtube.png' }}"
-				 class 	 = "sm"
+			<img src 	 = "{{ src('close_black.svg') }}"
+				 class 	 = "close"
 				 title	 = "STOP"
 				 (click) = "closeYTEvent()"
 			/>

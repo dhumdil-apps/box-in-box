@@ -8,6 +8,7 @@ import { Navigation }									from "./page/content/header/header.model";
 import { Footer }										from "./page/content/footer/footer.model";
 import { SliderComponent } 								from "./page/content/slider/slider.component";
 import { HeaderComponent } 								from "./page/content/header/header.component";
+import { YoutubePlayerComponent } 						from "./page/modules/youtube-player/youtube-player.component";
 
 @Component({
 	selector: 'bnb-main',
@@ -23,13 +24,18 @@ export class MainComponent implements OnInit {
 	public slider: Slider = new Slider();
 	public navigation: Navigation = new Navigation();
 	public footer: Footer = new Footer();
-	public videoAlbums: any = [];
+	public videoAlbum: any = [];
 
 	@ViewChild('bnb') bnb;
 	@ViewChild(PerfectScrollbarDirective) directiveScroll: PerfectScrollbarDirective;
 	@ViewChild(SliderComponent) sliderComponent: SliderComponent;
 	@ViewChild(HeaderComponent) headerComponent: HeaderComponent;
+	@ViewChild(YoutubePlayerComponent) youtubePlayer: YoutubePlayerComponent;
 
+	@HostListener('window:hashchange') handleHashchange()
+	{
+		this.validateRoute(window.location.hash.slice(1));
+	}
 	@HostListener('window:resize') handleResize()
 	{
 		this.onResize();
@@ -54,14 +60,20 @@ export class MainComponent implements OnInit {
 			'header': {
 				'isFixed': false,
 				'isFull': false,
-				'isLoaded': false,
 				'length': 0
 			},
 			'scroll-sections': {
 				'active': 0,
 				'list': ['header', 'content', 'footer']
 			},
-			'player': {} // TODO
+			'player': {
+				'isVisible': false,
+				'state': 0,
+				'id': ''
+			},
+			'album': {
+				'size': 0
+			}
 		};
 
 		this.http.get(this.app['path'].admin + 'langs.json').subscribe(data =>
@@ -77,14 +89,15 @@ export class MainComponent implements OnInit {
 		this.onResize();
 	}
 
-	private validateRoute(): void
+	private validateRoute(route: string): void
 	{
-		// console.log(this.router.routerState.snapshot.url);
-		if (this.router.routerState.snapshot.url === '/video-album')
+		this.app['player'].isVisible = false;
+
+		if (route === '/video-album')
 		{
 			this.app['active-route'] = 'video-album';
 		}
-		else if (this.router.routerState.snapshot.url === '/photo-album')
+		else if (route === '/photo-album')
 		{
 			this.app['active-route'] = 'photo-album';
 		}
@@ -96,45 +109,69 @@ export class MainComponent implements OnInit {
 
 	public selectLang(lang: string): void
 	{
-		this.app['langs'].selected = lang;
-
-		// slider
-		this.http.get(this.app['path'].admin + lang + '/slider.json').subscribe(sliderData =>
+		if (this.app['langs'].selected !== lang)
 		{
-			this.slider = new Slider(sliderData);
-			this.slider.loading = false;
+			this.app['langs'].selected = lang;
 
-			// header
-			this.http.get(this.app['path'].admin + lang + '/header.json').subscribe(headerData =>
+			// slider
+			this.http.get(this.app['path'].admin + lang + '/slider.json').subscribe(sliderData =>
 			{
-				this.navigation = new Navigation(headerData);
-				this.app['header'].isLoaded = true;
-				this.app['header'].length = this.navigation.links.length;
-				console.log(this.app);
-				this.app['header'].isFull =  (this.app['browser'].w <= ((this.navigation.links.length * 250) + 200));
-				this.navigation.loading = false;
+				this.slider = new Slider(sliderData);
+				this.slider.loading = false;
 
-				// footer
-				this.http.get(this.app['path'].admin + lang + '/footer.json').subscribe(footerData =>
+				// header
+				this.http.get(this.app['path'].admin + lang + '/header.json').subscribe(headerData =>
 				{
-					this.footer = new Footer(footerData);
-					this.footer.loading = false;
-					this.sliderComponent.setAutoSlideOn();
+					this.navigation = new Navigation(headerData);
+					this.app['header'].length = this.navigation.links.length;
+					this.app['header'].isFull =  (this.app['browser'].w <= ((this.navigation.links.length * 250) + 200));
+					this.navigation.loading = false;
 
-					this.http.get(this.app['path'].admin + lang + '/video-album.json').subscribe(data =>
+					// footer
+					this.http.get(this.app['path'].admin + lang + '/footer.json').subscribe(footerData =>
 					{
-						this.videoAlbums = data;
-						this.validateRoute();
-						this.loading = false;
+						this.footer = new Footer(footerData);
+						this.footer.loading = false;
+
+						// video-album
+						this.http.get(this.app['path'].admin + lang + '/video-album.json').subscribe(data =>
+						{
+							this.videoAlbum = data;
+							this.validateRoute(window.location.hash.slice(1));
+							this.loading = false;
+							this.sliderComponent.setAutoSlideOn();
+							this.scrollTo('header');
+						});
 					});
 				});
 			});
-		});
+		}
+		else
+		{
+			this.slider.loading = false;
+			this.navigation.loading = false;
+			this.footer.loading = false;
+			this.loading = false;
+			this.scrollTo('header');
+		}
+	}
+
+	public onSelectLang(): void
+	{
+		this.loading = true;
+		setTimeout(() =>
+		{
+			this.slider.loading = true;
+			this.navigation.loading = true;
+			this.footer.loading = true;
+		}, 100);
 	}
 
 	private onResize(): void
 	{
 		this.app['browser'].w = this.bnb.nativeElement.offsetParent.clientWidth;
+		this.app['browser'].h = this.bnb.nativeElement.offsetParent.clientHeight - 50;
+		this.app['album'].size = min(this.app['browser'].h - 150, this.app['browser'].w / 2);
 
 		if (!this.loading)
 		{
@@ -146,11 +183,9 @@ export class MainComponent implements OnInit {
 				this.headerComponent.closeMenu();
 			}
 		}
-		this.app['browser'].h = this.bnb.nativeElement.offsetParent.clientHeight - 50;
 
-		this.app['album'].size = min(this.app['browser'].h - 50, this.app['browser'].w / 2);
-
-		function min(x, y) {
+		function min(x, y)
+		{
 			if (x < y) {
 				return (x);
 			}
@@ -162,7 +197,7 @@ export class MainComponent implements OnInit {
 	{
 		this.app['header'].isFixed = (this.bnb.nativeElement.scrollTop > (this.app['browser'].h));
 
-		if (!this.loading && this.app['header'].isFull)
+		if (this.app['header'].isFull)
 		{
 			this.headerComponent.closeMenu();
 		}
@@ -175,8 +210,8 @@ export class MainComponent implements OnInit {
 			case 'content':
 			{
 				this.scrollTo('content');
-				this.app['active-route'] = navigation.id;
 				this.router.navigate([navigation.id]);
+				this.validateRoute(navigation.id);
 				return;
 			}
 			case 'scroll':
@@ -212,6 +247,11 @@ export class MainComponent implements OnInit {
 		}
 	}
 
+	public isActiveRoute(route: string): boolean
+	{
+		return (route === this.app['active-route']);
+	}
+
 	public openPopup(ev: any): void
 	{
 		this.popup.title = ev.title;
@@ -219,24 +259,35 @@ export class MainComponent implements OnInit {
 		this.popup.isVisible = true;
 	}
 
-	public playYT(): void
+	public onSelectID(id: string): void
 	{
-		console.log('playYT');
+		console.log('selected id', id);
+		this.youtubePlayer.selectID(id)
 	}
 
-	public stopYT(): void
+	public playYT(): void
 	{
-		console.log('stopYT');
+		this.youtubePlayer.play();
+	}
+
+	public closeYT(): void
+	{
+		this.youtubePlayer.close();
 	}
 
 	public pauseYT(): void
 	{
-		console.log('pauseYT');
+		this.youtubePlayer.pause();
 	}
 
 	public toggleYT(): void
 	{
-		console.log('toggleYT');
+		this.app['player'].isVisible = !this.app['player'].isVisible;
+
+		if (this.app['player'].isVisible)
+		{
+			this.scrollTo('content');
+		}
 	}
 
 }

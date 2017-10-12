@@ -1,0 +1,51 @@
+<div class="video-album">
+
+	<div class="albums">
+
+		<div class = "album {{ getStyle(i) }}" *ngFor = "let album of videoAlbum; let i = index" [style.width.px] = "app['album'].size" [style.height.px] = "app['album'].size">
+
+			<div class="cover" (click)="select(i)">
+
+				<img class = "img" src = "{{ album.img }}" />
+
+				<h1>{{ album.title }}</h1>
+
+				<div class = "control flex">
+
+					<img *ngIf = "isState('unselected', album.id)" (click) = "selectYT(album.id)" src = "{{ src('play_outline_white.svg') }}" />
+
+					<img *ngIf = "isState('playing', album.id)" (click) = "pauseYT()" src = "{{ src('pause_outline_white.svg') }}" />
+
+					<img *ngIf = "isState('paused', album.id)" (click) = "playYT()" src = "{{ src('play_outline_white.svg') }}" />
+
+					<div *ngIf = "isState('loading', album.id)" class = "uil-ring-css loader" style = "transform:scale(1)"><div></div></div>
+
+				</div>
+
+				<div class = "verse">
+					<h3 *ngFor = "let line of album.lines">{{ line }}</h3>
+				</div>
+
+			</div>
+
+			<div class="click-catcher" (click)="focus(i)"></div>
+
+		</div>
+
+		<div class="nav">
+
+			<div class = "flex"></div>
+
+			<div class="btn {{ album.isLocked ? 'disabled' : '' }}" *ngFor="let album of videoAlbum; let i = index" (click)="focusAlbum(i)"  title = "{{ album.title }}">
+
+				<div class="{{ isFocused(i) ? 'btn_active' : '' }}"></div>
+
+			</div>
+
+			<div class = "flex"></div>
+
+		</div>
+
+	</div>
+
+</div>

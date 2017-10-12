@@ -11,6 +11,8 @@ export class FooterComponent {
 
 	@Input() app;
 	@Input() footer;
+
+	@Output() selectLang = new EventEmitter();
 	@Output() popup = new EventEmitter();
 
 	constructor()

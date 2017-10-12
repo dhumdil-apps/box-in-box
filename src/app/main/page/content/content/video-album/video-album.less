@@ -1,0 +1,252 @@
+.video-album {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: #fff;
+	z-index: 200;
+	-webkit-box-shadow: inset 0 0 50px 10px rgba(0,0,0,0.25);
+	-moz-box-shadow: inset 0 0 50px 10px rgba(0,0,0,0.25);
+	box-shadow: inset 0 0 50px 10px rgba(0,0,0,0.25);
+}
+
+.albums {
+	position: relative;
+	min-width: 100%;
+	min-height: 100%;
+	width: 100%;
+	height: 100%;
+	display: flex;
+
+	.album {
+		position: absolute;
+		display: flex;
+		-webkit-box-shadow: 0 0 50px -10px rgba(0, 0, 0, 0.75);
+		-moz-box-shadow: 0 0 50px -10px rgba(0, 0, 0, 0.75);
+		box-shadow: 0 0 50px -10px rgba(0, 0, 0, 0.75);
+		cursor: pointer;
+		visibility: hidden;
+		top: 50%;
+		transform: translate3d(0, -50%, 0) scale3d(0,0,0);
+		z-index: 100;
+
+		.cover {
+			display: flex;
+			flex-direction: column;
+			position: relative;
+			min-width: 100%;
+			width: 100%;
+			min-height: 100%;
+			height: 100%;
+
+			h1 {
+				position: relative;
+				text-align: center;
+				margin-top: 10px;
+				width: 100%;
+				color: #fff;
+				font-size: 32px;
+				font-weight: 600;
+				opacity: 0;
+				transition: all 300ms ease-in;
+			}
+			.verse {
+				position: relative;
+				width: 100%;
+				opacity: 0;
+				transition: all 300ms ease-in;
+				padding: 20px 0;
+
+				h3 {
+					text-align: center;
+					color: #fff;
+					padding: 0 10px;
+					font-size: 24px;
+					line-height: 125%;
+					font-weight: 600;
+				}
+			}
+			.img {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				border-radius: 5px;
+				z-index: 200;
+			}
+			.control {
+				display: flex;
+				transition: all 300ms ease-in;
+				opacity: 0;
+
+				img {
+					cursor: pointer;
+					width: 50px;
+					margin: auto;
+				}
+				.loader {
+					width: 60px;
+					height: 60px;
+					margin: auto;
+
+					> div {
+						top: 10px;
+						left: 10px;
+						width: 40px;
+						height: 40px;
+						box-shadow: 0 2px 0 0 #fff;
+					}
+				}
+			}
+		}
+		.click-catcher {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			left: 0;
+			top: 0;
+			background: rgba(0,0,0, .25);
+			border-radius: 5px;
+			transition: 300ms ease-in-out;
+			z-index: 210;
+		}
+	}
+	.focused {
+		left: 50%;
+		visibility: visible;
+		transform: translate3d(-50%, -50%, 0) scale3d(.75,.75,.75);
+		transition: all 300ms ease-in-out;
+		z-index: 200;
+
+		.click-catcher {
+			background: rgba(0,0,0, 0);
+		}
+	}
+	.selected {
+		transform: translate3d(-50%, -50%, 0)  scale3d(1, 1, 1);
+
+		&:hover {
+			.cover {
+				h1, .verse, .control {
+					opacity: 1;
+				}
+			}
+			.click-catcher {
+				background: rgba(0,0,0, .75);
+			}
+		}
+		.cover {
+			h1, .verse, .control {
+				z-index: 250;
+			}
+		}
+		.click-catcher {
+			background: rgba(0,0,0, 0);
+			z-index: 210;
+		}
+	}
+	.focus-previous {
+		left: 0;
+		visibility: visible;
+		transform: translate3d(-50%, -50%, 0)  scale3d(.5,.5,.5);
+		transition: all 300ms ease-in-out;
+	}
+	.focus-previous:hover {
+		.click-catcher {
+			background: rgba(0,0,0, 0);
+		}
+	}
+	.focus-next {
+		left: 100%;
+		visibility: visible;
+		transform: translate3d(-50%, -50%, 0) scale3d(.5,.5,.5);
+		transition: all 300ms ease-in-out;
+	}
+	.focus-next:hover {
+		.click-catcher {
+			background: rgba(0,0,0, 0);
+		}
+	}
+	.unfocus-previous {
+		left: -25%;
+		visibility: visible;
+		transform: translate3d(-50%, -50%, 0) scale3d(0,0,0);
+		transition: all 300ms ease-in-out;
+		z-index: 99;
+		.click-catcher {
+			background: rgba(0,0,0, 1);
+		}
+	}
+	.unfocus-next {
+		left: 125%;
+		visibility: visible;
+		transform: translate3d(-50%, -50%, 0) scale3d(0,0,0);
+		transition: all 300ms ease-in-out;
+		z-index: 99;
+		.click-catcher {
+			background: rgba(0,0,0, 1);
+		}
+	}
+	.nav {
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+		height: 50px;
+		left: 0;
+		display: flex;
+		opacity: .5;
+		z-index: 99;
+
+		&:hover {
+			opacity: 1;
+		}
+		.btn {
+			position: relative;
+			margin: auto 5px;
+			padding: 10px;
+			cursor: pointer;
+
+			&:hover {
+				> div {
+					background: #333;
+				}
+			}
+			&_active {
+				background: #000;
+			}
+			> div {
+				width: 10px;
+				height: 10px;
+				border-radius: 10px;
+				border: 2px solid #333;
+			}
+		}
+		.disabled {
+			cursor: auto;
+		}
+	}
+}
+
+@media all and (max-width: 1024px) {
+	.albums {
+		.album {
+			.album-cover {
+				h1 {
+					font-size: 24px;
+				}
+			}
+		}
+	}
+}
+
+@media all and (max-width: 600px) {
+	.albums {
+		.album {
+			.album-cover {
+				h1 {
+					font-size: 18px;
+				}
+			}
+		}
+	}
+}

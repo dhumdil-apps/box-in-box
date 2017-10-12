@@ -10,10 +10,10 @@ import { SliderComponent }						from './main/page/content/slider/slider.componen
 import { HeaderComponent }						from './main/page/content/header/header.component';
 import { FooterComponent }						from './main/page/content/footer/footer.component';
 
-// router
+// content
 import { AppRoutingModule, routedComponents }	from './app.routing';
-import { VideoAlbumComponent } 					from './main/page/content/router/video-album/video-album.component';
-import { PhotoAlbumComponent } 					from './main/page/content/router/photo-album/photo-album.component';
+import { VideoAlbumComponent } 					from './main/page/content/content/video-album/video-album.component';
+import { PhotoAlbumComponent } 					from './main/page/content/content/photo-album/photo-album.component';
 
 // modules
 import { PopupComponent }						from './main/page/modules/popup/popup.component';

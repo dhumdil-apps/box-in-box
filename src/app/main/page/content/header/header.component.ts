@@ -75,10 +75,6 @@ export class HeaderComponent {
 
 	public toggleYTEvent(): void
 	{
-		this.navigateToLink({
-			'id': 'content',
-			'type': 'scroll'
-		}, -1);
 		this.toggleYT.emit();
 	}
 
@@ -95,6 +91,11 @@ export class HeaderComponent {
 	public closeYTEvent(): void
 	{
 		this.closeYT.emit();
+	}
+
+	public src(icon: string): string
+	{
+		return (this.app['path'].app + icon);
 	}
 
 }

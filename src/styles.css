@@ -34,6 +34,63 @@ bnb-slider {
 	}
 }
 
-.yt, .page-not-found {
+.page-not-found {
 	animation: fade-in-page 300ms ease-out;
 }
+
+.slide-in-left .video-album {
+	animation: slide-in-left 300ms ease-in-out;
+	transform: none;
+}
+
+.slide-out-left .video-album {
+	animation: slide-out-left 300ms ease-in-out;
+	transform: translateX(-100%);
+}
+
+@keyframes slide-in-left {
+	from {
+		transform: translateX(-100%);
+	}
+	to {
+		transform: none;
+	}
+}
+
+@keyframes slide-out-left {
+	from {
+		transform: none;
+	}
+	to {
+		transform: translateX(-100%);
+	}
+}
+
+.slide-in-right .photo-album {
+	animation: slide-in-right 300ms ease-in-out;
+	transform: none;
+}
+
+.slide-out-right .photo-album {
+	animation: slide-out-right 300ms ease-in-out;
+	transform: translateX(100%);
+}
+
+@keyframes slide-in-right {
+	from {
+		transform: translateX(100%);
+	}
+	to {
+		transform: none;
+	}
+}
+
+@keyframes slide-out-right {
+	from {
+		transform: none;
+	}
+	to {
+		transform: translateX(100%);
+	}
+}
+

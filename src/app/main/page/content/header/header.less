@@ -140,26 +140,34 @@
 	padding: 5px 15px;
 }
 
-.player {
-	position: absolute;
-	top: 0;
-	right: 60px;
-	animation: wobble 500ms;
-	animation-fill-mode: both;
-	cursor: pointer;
-	width: 40px;
-	height: 40px;
-	padding: 5px 15px;
-}
+.control {
+	z-index: 2000;
 
-.sm {
-	position: absolute;
-	top: 0;
-	right: 0;
-	cursor: pointer;
-	width: 30px;
-	height: 30px;
-	padding: 10px 15px;
+	img {
+		position: absolute;
+		top: 0;
+		cursor: pointer;
+	}
+	.player {
+		animation: wobble 500ms;
+		right: 120px;
+		animation-fill-mode: both;
+		width: 40px;
+		height: 40px;
+		padding: 5px 15px;
+	}
+	.play-pause {
+		right: 60px;
+		width: 30px;
+		height: 30px;
+		padding: 10px 15px;
+	}
+	.close {
+		right: 0;
+		width: 30px;
+		height: 30px;
+		padding: 10px 15px;
+	}
 }
 
 @keyframes fade-in-catcher {
@@ -221,3 +229,26 @@
 	}
 }
 
+@media all and (max-width: 600px) {
+	.control {
+
+		.player {
+			right: 60px;
+		}
+		.play-pause {
+			display: none;
+		}
+	}
+}
+
+@media all and (max-width: 400px) {
+	.control {
+
+		.player {
+			display: none;
+		}
+		.play-pause {
+			display: none;
+		}
+	}
+}
