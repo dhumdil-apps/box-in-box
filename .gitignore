@@ -1,8 +1,9 @@
-# dependencies
+# deps
 /node_modules
 
-# IDEs and editors
+# ide 
 /.idea
 
-# misc
+# debug
 npm-debug.log
+
