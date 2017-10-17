@@ -28,6 +28,7 @@
 		top: 50%;
 		transform: translate3d(0, -50%, 0) scale3d(0,0,0);
 		z-index: 100;
+		overflow: hidden;
 
 		.cover {
 			display: flex;
@@ -230,7 +231,7 @@
 @media all and (max-width: 1024px) {
 	.albums {
 		.album {
-			.album-cover {
+			.cover {
 				h1 {
 					font-size: 24px;
 				}
@@ -242,9 +243,12 @@
 @media all and (max-width: 600px) {
 	.albums {
 		.album {
-			.album-cover {
+			.cover {
 				h1 {
 					font-size: 18px;
+				}
+				.verse {
+					display: none;
 				}
 			}
 		}

@@ -171,7 +171,7 @@ export class MainComponent implements OnInit {
 	{
 		this.app['browser'].w = this.bnb.nativeElement.offsetParent.clientWidth;
 		this.app['browser'].h = this.bnb.nativeElement.offsetParent.clientHeight - 50;
-		this.app['album'].size = min(this.app['browser'].h - 150, this.app['browser'].w / 2);
+		this.app['album'].size = min(this.app['browser'].h - 100, this.app['browser'].w / 2);
 
 		if (!this.loading)
 		{
@@ -282,12 +282,18 @@ export class MainComponent implements OnInit {
 
 	public toggleYT(): void
 	{
-		this.app['player'].isVisible = !this.app['player'].isVisible;
-
 		if (this.app['player'].isVisible)
 		{
-			this.scrollTo('content');
+			if (this.bnb.nativeElement.scrollTop === this.app['browser'].h)
+			{
+				this.app['player'].isVisible = false;
+			}
 		}
+		else
+		{
+			this.app['player'].isVisible = true;
+		}
+		this.scrollTo('content');
 	}
 
 }
